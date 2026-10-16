@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Control Diario de Caja - Ornela Cremoladas</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo/images.png">
@@ -25,6 +25,84 @@
             --item-bg: #F8FAFC;
             --item-border: #F1F5F9;
             --shadow-card: 0 20px 40px rgba(0, 120, 180, 0.12);
+        }
+
+        /* PANTALLA DE CARGA (SPLASH SCREEN NATURAL Y MODERNA) */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #A7E4FF 0%, #8ED8F8 45%, #FF459E 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
+        }
+
+        .splash-logo-container {
+            width: 125px;
+            height: 125px;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 45px rgba(255, 26, 131, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.4);
+            animation: floatLogo 3s ease-in-out infinite;
+            margin-bottom: 1.5rem;
+            padding: 16px;
+        }
+
+        .splash-logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.02); }
+        }
+
+        .splash-title {
+            color: #FFFFFF;
+            font-size: 1.85rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.25rem;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .splash-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2.2rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .spinner-loader {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.35);
+            border-top: 3px solid #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         body {
@@ -345,7 +423,6 @@
             cursor: not-allowed;
         }
 
-        /* Estilo Ticket Recibo */
         .ticket-textarea {
             background-color: #FFFCF7 !important;
             border: 2px dashed #CBD5E1 !important;
@@ -427,11 +504,9 @@
             text-align: center;
         }
 
-        .reset-modal-icon {
+        .reset-modal-icon, .clear-modal-icon {
             width: 64px;
             height: 64px;
-            background-color: #FEF2F2;
-            color: #EF4444;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -439,22 +514,21 @@
             font-size: 1.8rem;
             margin: 0 auto 1rem auto;
         }
-
-        .clear-modal-icon {
-            width: 64px;
-            height: 64px;
-            background-color: #FEF3C7;
-            color: #D97706;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            margin: 0 auto 1rem auto;
-        }
+        .reset-modal-icon { background-color: #FEF2F2; color: #EF4444; }
+        .clear-modal-icon { background-color: #FEF3C7; color: #D97706; }
     </style>
 </head>
 <body>
+
+    <!-- PANTALLA DE CARGA (SPLASH SCREEN NATURAL Y ELEGANTE) -->
+    <div id="splash-screen">
+        <div class="splash-logo-container">
+            <img src="logo/images.png" alt="Ornela Cremoladas Logo">
+        </div>
+        <div class="splash-title">Ornela Cremoladas</div>
+        <div class="splash-subtitle">Control de Caja</div>
+        <div class="spinner-loader"></div>
+    </div>
 
     <div class="app-wrapper">
         <div class="brand-header">
@@ -558,14 +632,14 @@
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
 
-            <!-- Copiar Resumen General -->
+            <!-- Consolidado General -->
             <button class="action-item" type="button" onclick="copiarResumenGeneral()">
                 <div class="icon-box icon-general"><i class="fa-solid fa-clipboard-list"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Copiar Resumen General</p>
-                    <p class="item-desc">Copiar todos los informes en uno</p>
+                    <p class="item-title">Consolidado General</p>
+                    <p class="item-desc">Copiar o enviar resumen completo</p>
                 </div>
-                <i class="fa-solid fa-copy item-arrow"></i>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
 
             <!-- Resumen Yape -->
@@ -583,7 +657,7 @@
 
         <div class="app-footer">
             <div class="footer-note">
-                <i class="fa-solid fa-check text-success"></i> Guardado automático en este dispositivo
+                <i class="fa-solid fa-check text-success"></i> Funciona 100% sin internet (Modo Offline)
             </div>
             <button class="btn-reset-link" type="button" data-bs-toggle="modal" data-bs-target="#modalReset">
                 <i class="fa-solid fa-rotate-right"></i> Reiniciar día / Nuevo turno
@@ -591,7 +665,7 @@
         </div>
     </div>
 
-    <!-- MODAL INICIO DEL DÍA -->
+    <!-- MODAL INICIO -->
     <div class="modal fade" id="modalInicio" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -607,13 +681,11 @@
                         <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="init_carton_medio" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Litro</label><input type="number" inputmode="decimal" id="init_carton_litro" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-info">Vasos de Plástico</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="init_plastico_12" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="init_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
-
                     <div class="mt-3">
                         <label class="small fw-bold text-dark mb-1">Informe Generado:</label>
                         <textarea id="result_inicio" class="form-control ticket-textarea" rows="6" readonly></textarea>
@@ -622,15 +694,16 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('inicio', 'Inicio del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 me-1" onclick="generarInformeInicio()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_inicio', 'inicio')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-success rounded-pill px-2 me-1" onclick="generarInformeInicio()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_inicio', 'inicio')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_inicio')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL YAPES DEL DÍA -->
+    <!-- MODAL YAPES -->
     <div class="modal fade" id="modalYape" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -645,14 +718,12 @@
                         <input type="number" step="0.01" inputmode="decimal" id="yape_input_monto" class="form-control" placeholder="Ej. 10.00">
                         <button class="btn btn-dark fw-bold px-3" type="button" onclick="agregarYape()"><i class="fa-solid fa-plus"></i> Agregar</button>
                     </div>
-
                     <div class="mb-3">
                         <label class="small fw-bold text-muted mb-1">Lista de Yapes:</label>
                         <div id="yapes_lista_container" style="max-height: 120px; overflow-y: auto;" class="p-2 border rounded-3 bg-light">
                             <span class="text-muted small fst-italic">No hay Yapes ingresados.</span>
                         </div>
                     </div>
-
                     <div class="p-3 bg-light rounded-3 mb-3 border">
                         <div class="small text-muted fw-semibold">Cadena de suma:</div>
                         <div id="yape_cadena_preview" class="font-monospace text-primary fw-bold" style="word-break: break-all;">0</div>
@@ -661,7 +732,6 @@
                             <span class="small text-success">Total: <strong id="yape_total_preview">S/ 0.00</strong></span>
                         </div>
                     </div>
-
                     <div>
                         <label class="small fw-bold text-dark mb-1">Informe:</label>
                         <textarea id="result_yape" class="form-control ticket-textarea" rows="5" readonly></textarea>
@@ -670,8 +740,9 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('yape', 'Yapes del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #9333EA;" onclick="generarInformeYapes()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_yape', 'yape')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2 me-1" style="background: #9333EA;" onclick="generarInformeYapes()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_yape', 'yape')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_yape')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
@@ -693,14 +764,12 @@
                         <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" inputmode="decimal" id="need_cucharas_grandes" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" inputmode="decimal" id="need_servilletas" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag">2. Sorbetes y Bolsas (Paquetes)</span>
                     <div class="row g-2 mb-2">
                         <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" inputmode="decimal" id="need_sorbetes" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" inputmode="decimal" id="need_bolsas_chicas" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" inputmode="decimal" id="need_bolsas_medianas" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag">3. Vasos (Paquetes)</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" inputmode="decimal" id="need_carton_8" class="form-control" placeholder="0"></div>
@@ -710,7 +779,6 @@
                         <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" inputmode="decimal" id="need_plastico_12" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" inputmode="decimal" id="need_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag">4. Tapas de Cartón (Paquetes)</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" inputmode="decimal" id="need_tapas_8" class="form-control" placeholder="0"></div>
@@ -718,7 +786,6 @@
                         <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" inputmode="decimal" id="need_tapas_medio" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" inputmode="decimal" id="need_tapas_litro" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag">5. Insumos de Limpieza</span>
                     <div class="row g-2 mb-3">
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_lejia" class="form-check-input me-2"> Lejía</label></div>
@@ -726,7 +793,6 @@
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_detergente" class="form-check-input me-2"> Detergente</label></div>
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_guantes" class="form-check-input me-2"> Guantes</label></div>
                     </div>
-
                     <div class="mt-3">
                         <label class="small fw-bold text-dark mb-1">Informe de Faltantes:</label>
                         <textarea id="result_needs" class="form-control ticket-textarea" rows="6" readonly></textarea>
@@ -735,15 +801,16 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('needs', 'Necesidades')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" class="btn btn-sm btn-warning text-white rounded-pill px-3 me-1" onclick="generarInformeNeeds()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_needs', 'needs')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-warning text-white rounded-pill px-2 me-1" onclick="generarInformeNeeds()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_needs', 'needs')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_needs')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL INGRESOS DE STOCK -->
+    <!-- MODAL INGRESOS -->
     <div class="modal fade" id="modalIngresos" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -758,15 +825,13 @@
                         <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" inputmode="decimal" id="ing_cucharas_grandes" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" inputmode="decimal" id="ing_servilletas" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-info">2. Sorbetes y Bolsas (Paquetes)</span>
                     <div class="row g-2 mb-2">
                         <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" inputmode="decimal" id="ing_sorbetes" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" inputmode="decimal" id="ing_bolsas_chicas" class="form-control" placeholder="0"></div>
                         <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" inputmode="decimal" id="ing_bolsas_medianas" class="form-control" placeholder="0"></div>
                     </div>
-
-                    <span class="section-tag text-info">3. Vasos (Unidades / Paquetes Ingresados)</span>
+                    <span class="section-tag text-info">3. Vasos</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" inputmode="decimal" id="ing_carton_8" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" inputmode="decimal" id="ing_carton_12" class="form-control" placeholder="0"></div>
@@ -775,7 +840,6 @@
                         <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" inputmode="decimal" id="ing_plastico_12" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" inputmode="decimal" id="ing_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-info">4. Tapas de Cartón (Paquetes)</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" inputmode="decimal" id="ing_tapas_8" class="form-control" placeholder="0"></div>
@@ -783,7 +847,6 @@
                         <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" inputmode="decimal" id="ing_tapas_medio" class="form-control" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" inputmode="decimal" id="ing_tapas_litro" class="form-control" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-info">5. Insumos de Limpieza</span>
                     <div class="row g-2 mb-3">
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="ing_clean_lejia" class="form-check-input me-2"> Lejía</label></div>
@@ -791,7 +854,6 @@
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="ing_clean_detergente" class="form-check-input me-2"> Detergente</label></div>
                         <div class="col-6"><label class="check-card"><input type="checkbox" id="ing_clean_guantes" class="form-check-input me-2"> Guantes</label></div>
                     </div>
-
                     <div class="mt-3">
                         <label class="small fw-bold text-dark mb-1">Informe de Ingresos:</label>
                         <textarea id="result_ingresos" class="form-control ticket-textarea" rows="6" readonly></textarea>
@@ -800,15 +862,16 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('ingresos', 'Ingresos de Stock')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #0284C7;" onclick="generarInformeIngresos()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_ingresos', 'ingresos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2 me-1" style="background: #0284C7;" onclick="generarInformeIngresos()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_ingresos', 'ingresos')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_ingresos')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL GASTOS DEL DÍA -->
+    <!-- MODAL GASTOS -->
     <div class="modal fade" id="modalGastos" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -819,30 +882,19 @@
                 <div class="modal-body">
                     <span class="section-tag text-dark">Selección de Gastos</span>
                     <div class="mb-3">
-                        <label class="check-card">
-                            <input type="checkbox" id="gasto_bebidas" class="form-check-input me-2"> 🥤 Consumo de Bebidas
-                        </label>
-                        <label class="check-card">
-                            <input type="checkbox" id="gasto_sueldo" class="form-check-input me-2" onchange="toggleSueldoInput()"> 👥 Sueldo Personal
-                        </label>
-                        <label class="check-card">
-                            <input type="checkbox" id="gasto_cochera" class="form-check-input me-2"> 🅿️ Cochera
-                        </label>
-                        <label class="check-card">
-                            <input type="checkbox" id="gasto_guarderia" class="form-check-input me-2"> 🛡️ Guardería
-                        </label>
+                        <label class="check-card"><input type="checkbox" id="gasto_bebidas" class="form-check-input me-2"> 🥤 Consumo de Bebidas</label>
+                        <label class="check-card"><input type="checkbox" id="gasto_sueldo" class="form-check-input me-2" onchange="toggleSueldoInput()"> 👥 Sueldo Personal</label>
+                        <label class="check-card"><input type="checkbox" id="gasto_cochera" class="form-check-input me-2"> 🅿️ Cochera</label>
+                        <label class="check-card"><input type="checkbox" id="gasto_guarderia" class="form-check-input me-2"> 🛡️ Guardería</label>
                     </div>
-
                     <div class="mb-3 ps-2" id="sueldo_personas_container">
                         <label class="small text-muted fw-semibold">Cantidad de personas (Sueldo):</label>
                         <input type="number" inputmode="decimal" id="gasto_sueldo_personas" class="form-control mt-1" placeholder="Ej. 2" disabled>
                     </div>
-
                     <span class="section-tag text-dark">Otros Gastos (Detalle)</span>
                     <div class="mb-3">
                         <input type="text" id="gasto_otros_detalle" class="form-control" placeholder="Ej. Vaso de chicha, sombrilla, etc.">
                     </div>
-
                     <div class="mt-3">
                         <label class="small fw-bold text-dark mb-1">Informe de Gastos:</label>
                         <textarea id="result_gastos" class="form-control ticket-textarea" rows="6" readonly></textarea>
@@ -851,15 +903,16 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('gastos', 'Gastos del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #D97706;" onclick="generarInformeGastos()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_gastos', 'gastos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2 me-1" style="background: #D97706;" onclick="generarInformeGastos()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_gastos', 'gastos')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_gastos')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL FIN DEL DÍA -->
+    <!-- MODAL FIN -->
     <div class="modal fade" id="modalFin" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -871,7 +924,6 @@
                     <div id="fin_blocked_notice" class="blocked-notice d-none">
                         <i class="fa-solid fa-lock me-1"></i> Para ingresar datos de cierre, primero debes registrar el Inicio del Día.
                     </div>
-
                     <span class="section-tag text-primary">Sobrantes Cartón</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" inputmode="decimal" id="fin_carton_8" class="form-control fin-field" placeholder="0"></div>
@@ -879,17 +931,14 @@
                         <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="fin_carton_medio" class="form-control fin-field" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Litro</label><input type="number" inputmode="decimal" id="fin_carton_litro" class="form-control fin-field" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-info">Sobrantes Plástico</span>
                     <div class="row g-2 mb-2">
                         <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="fin_plastico_12" class="form-control fin-field" placeholder="0"></div>
                         <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="fin_plastico_medio" class="form-control fin-field" placeholder="0"></div>
                     </div>
-
                     <span class="section-tag text-success">Resumen de Dinero</span>
                     <div class="mb-2"><label class="small text-muted">Total Yape (S/)</label><input type="number" step="0.01" inputmode="decimal" id="fin_monto_yape" class="form-control" placeholder="0.00" readonly></div>
                     <div class="mb-3"><label class="small text-muted">Total Efectivo (S/)</label><input type="number" step="0.01" inputmode="decimal" id="fin_monto_efectivo" class="form-control fin-field" placeholder="0.00"></div>
-
                     <div class="mt-3">
                         <label class="small fw-bold text-dark mb-1">Informe de Cierre:</label>
                         <textarea id="result_fin" class="form-control ticket-textarea" rows="7" readonly></textarea>
@@ -898,24 +947,45 @@
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('fin', 'Fin del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
-                        <button type="button" id="btn_generar_fin" class="btn btn-sm btn-danger rounded-pill px-3 me-1" onclick="generarInformeFin()">Generar</button>
-                        <button type="button" id="btn_copiar_fin" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_fin', 'fin')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" id="btn_generar_fin" class="btn btn-sm btn-danger rounded-pill px-2 me-1" onclick="generarInformeFin()">Generar</button>
+                        <button type="button" id="btn_copiar_fin" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_fin', 'fin')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_fin')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL CONFIRMACIÓN DE LIMPIAR SECCIÓN -->
+    <!-- MODAL CONSOLIDADO -->
+    <div class="modal fade" id="modalConsolidado" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h6 class="modal-title fw-bold text-primary"><i class="fa-solid fa-clipboard-list me-2"></i>Consolidado General</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="small fw-bold text-dark mb-1">Vista Previa del Consolidado:</label>
+                        <textarea id="result_consolidado" class="form-control ticket-textarea" rows="10" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarResumenGeneral()"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    <button type="button" class="btn btn-sm text-white rounded-pill px-3" style="background-color: #25D366;" onclick="enviarWhatsAppConsolidado()"><i class="fa-brands fa-whatsapp me-1"></i> Enviar por WhatsApp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN LIMPIAR -->
     <div class="modal fade" id="modalConfirmClear" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-center p-3">
                 <div class="modal-body pt-4">
-                    <div class="clear-modal-icon">
-                        <i class="fa-solid fa-broom"></i>
-                    </div>
+                    <div class="clear-modal-icon"><i class="fa-solid fa-broom"></i></div>
                     <h5 class="fw-bold text-dark mb-2">¿Limpiar esta sección?</h5>
-                    <p class="text-muted small mb-0">Se borrarán todos los campos registrados en <strong id="clear_section_title">esta sección</strong>. Las demás secciones no se verán afectadas.</p>
+                    <p class="text-muted small mb-0">Se borrarán todos los campos registrados en <strong id="clear_section_title">esta sección</strong>.</p>
                 </div>
                 <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
@@ -925,16 +995,14 @@
         </div>
     </div>
 
-    <!-- MODAL DE REINICIO DE TURNO (PERSONALIZADO) -->
+    <!-- MODAL REINICIO TURNO -->
     <div class="modal fade" id="modalReset" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-center p-3">
                 <div class="modal-body pt-4">
-                    <div class="reset-modal-icon">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
+                    <div class="reset-modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h5 class="fw-bold text-dark mb-2">¿Reiniciar Turno?</h5>
-                    <p class="text-muted small mb-0">Esta acción borrará todos los datos guardados del turno actual y comenzará un nuevo día. No se podrá deshacer.</p>
+                    <p class="text-muted small mb-0">Esta acción borrará todos los datos guardados del turno actual y comenzará un nuevo día.</p>
                 </div>
                 <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-3">
                     <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
@@ -950,43 +1018,45 @@
         <span id="toastMessage">¡Copiado al portapapeles!</span>
     </div>
 
-    <!-- JavaScript Bundle de Bootstrap -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         let sectionToClear = null;
-
-        // Estado y LocalStorage con Timestamps Fijos
         let state = {
             puesto: 'Puesto 1',
             inicio: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', timestamp: null },
             yapes: [],
             yape_timestamp: null,
             needs: {
-                cucharas_chicas: '', cucharas_grandes: '', servilletas: '',
-                sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
-                carton_8: '', carton_12: '', carton_medio: '', carton_litro: '',
-                plastico_12: '', plastico_medio: '',
+                cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
+                carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '',
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
-                lejia: false, trapo: false, detergente: false, guantes: false,
-                generated: false,
-                timestamp: null
+                lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null
             },
             ingresos: {
-                cucharas_chicas: '', cucharas_grandes: '', servilletas: '',
-                sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
-                carton_8: '', carton_12: '', carton_medio: '', carton_litro: '',
-                plastico_12: '', plastico_medio: '',
+                cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
+                carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '',
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
-                lejia: false, trapo: false, detergente: false, guantes: false,
-                generated: false,
-                timestamp: null
+                lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null
             },
             gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', timestamp: null },
             fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('ornela_arqueo_v16');
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
+
+            // Ocultar pantalla de carga animada de forma natural
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => splash.style.display = 'none', 600);
+            }, 1000);
+
+            const saved = localStorage.getItem('ornela_arqueo_v17');
             if (saved) {
                 try { state = JSON.parse(saved); restoreFormValues(); } catch(e){}
             }
@@ -1011,17 +1081,10 @@
             const isInicioDone = hasDataInicio();
             const fields = document.querySelectorAll('.fin-field');
             const notice = document.getElementById('fin_blocked_notice');
-
-            fields.forEach(el => {
-                el.disabled = !isInicioDone;
-            });
-
+            fields.forEach(el => { el.disabled = !isInicioDone; });
             if (notice) {
-                if (!isInicioDone) {
-                    notice.classList.remove('d-none');
-                } else {
-                    notice.classList.add('d-none');
-                }
+                if (!isInicioDone) notice.classList.remove('d-none');
+                else notice.classList.add('d-none');
             }
         }
 
@@ -1029,9 +1092,7 @@
             const isChecked = document.getElementById('gasto_sueldo').checked;
             const inputPers = document.getElementById('gasto_sueldo_personas');
             inputPers.disabled = !isChecked;
-            if (!isChecked) {
-                inputPers.value = '';
-            }
+            if (!isChecked) inputPers.value = '';
         }
 
         function updateStatusBadges() {
@@ -1052,7 +1113,6 @@
 
         function saveState() {
             state.puesto = document.getElementById('puesto_select').value;
-
             state.inicio.carton_8 = document.getElementById('init_carton_8').value;
             state.inicio.carton_12 = document.getElementById('init_carton_12').value;
             state.inicio.carton_medio = document.getElementById('init_carton_medio').value;
@@ -1117,14 +1177,13 @@
             state.fin.plastico_medio = document.getElementById('fin_plastico_medio').value;
             state.fin.efectivo = document.getElementById('fin_monto_efectivo').value;
 
-            localStorage.setItem('ornela_arqueo_v16', JSON.stringify(state));
+            localStorage.setItem('ornela_arqueo_v17', JSON.stringify(state));
             checkFinLockState();
             updateStatusBadges();
         }
 
         function restoreFormValues() {
             document.getElementById('puesto_select').value = state.puesto || 'Puesto 1';
-
             document.getElementById('init_carton_8').value = state.inicio.carton_8 || '';
             document.getElementById('init_carton_12').value = state.inicio.carton_12 || '';
             document.getElementById('init_carton_medio').value = state.inicio.carton_medio || '';
@@ -1202,11 +1261,7 @@
         function actualizarReloj() {
             const now = new Date();
             const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const dia = now.getDate();
-            const mes = meses[now.getMonth()];
-            const anio = now.getFullYear();
-            
-            document.getElementById('live-date').innerText = `${dia} ${mes}. ${anio}`;
+            document.getElementById('live-date').innerText = `${now.getDate()} ${meses[now.getMonth()]}. ${now.getFullYear()}`;
             document.getElementById('live-time').innerText = now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
         }
 
@@ -1218,33 +1273,26 @@
             return document.getElementById('puesto_select').value || 'Puesto 1';
         }
 
-        // VALIDACIONES DE DATOS
         function hasDataInicio() {
             const i = state.inicio;
             return !!(i.carton_8 || i.carton_12 || i.carton_medio || i.carton_litro || i.plastico_12 || i.plastico_medio);
         }
 
-        function hasDataYapes() {
-            return state.yapes.length > 0;
-        }
+        function hasDataYapes() { return state.yapes.length > 0; }
 
         function hasDataNeeds() {
             const n = state.needs;
-            const tieneValores = !!(n.cucharas_chicas || n.cucharas_grandes || n.servilletas || n.sorbetes || n.bolsas_chicas || n.bolsas_medianas || n.carton_8 || n.carton_12 || n.carton_medio || n.carton_litro || n.plastico_12 || n.plastico_medio || n.tapas_8 || n.tapas_12 || n.tapas_medio || n.tapas_litro || n.lejia || n.trapo || n.detergente || n.guantes);
-            return tieneValores || !!n.generated;
+            return !!(n.cucharas_chicas || n.cucharas_grandes || n.servilletas || n.sorbetes || n.bolsas_chicas || n.bolsas_medianas || n.carton_8 || n.carton_12 || n.carton_medio || n.carton_litro || n.plastico_12 || n.plastico_medio || n.tapas_8 || n.tapas_12 || n.tapas_medio || n.tapas_litro || n.lejia || n.trapo || n.detergente || n.guantes || n.generated);
         }
 
         function hasDataIngresos() {
             const ing = state.ingresos;
-            const tieneValores = !!(ing.cucharas_chicas || ing.cucharas_grandes || ing.servilletas || ing.sorbetes || ing.bolsas_chicas || ing.bolsas_medianas || ing.carton_8 || ing.carton_12 || ing.carton_medio || ing.carton_litro || ing.plastico_12 || ing.plastico_medio || ing.tapas_8 || ing.tapas_12 || ing.tapas_medio || ing.tapas_litro || ing.lejia || ing.trapo || ing.detergente || ing.guantes);
-            return tieneValores || !!ing.generated;
+            return !!(ing.cucharas_chicas || ing.cucharas_grandes || ing.servilletas || ing.sorbetes || ing.bolsas_chicas || ing.bolsas_medianas || ing.carton_8 || ing.carton_12 || ing.carton_medio || ing.carton_litro || ing.plastico_12 || ing.plastico_medio || ing.tapas_8 || ing.tapas_12 || ing.tapas_medio || ing.tapas_litro || ing.lejia || ing.trapo || ing.detergente || ing.guantes || ing.generated);
         }
 
         function hasDataGastos() {
             const g = state.gastos;
-            if (g.sueldo && (!g.sueldo_personas || parseInt(g.sueldo_personas) <= 0)) {
-                return false;
-            }
+            if (g.sueldo && (!g.sueldo_personas || parseInt(g.sueldo_personas) <= 0)) return false;
             return !!(g.bebidas || g.sueldo || g.cochera || g.guarderia || (g.otros_detalle && g.otros_detalle.trim().length > 0));
         }
 
@@ -1253,81 +1301,39 @@
             return !!(f.carton_8 || f.carton_12 || f.carton_medio || f.carton_litro || f.plastico_12 || f.plastico_medio || f.efectivo);
         }
 
-        // CONFIRMACIÓN Y LIMPIEZA POR MODAL
         function confirmarLimpiarModal(tipo, nombreSeccion) {
             sectionToClear = tipo;
             document.getElementById('clear_section_title').innerText = nombreSeccion;
-            const modalConfirm = new bootstrap.Modal(document.getElementById('modalConfirmClear'));
-            modalConfirm.show();
+            new bootstrap.Modal(document.getElementById('modalConfirmClear')).show();
         }
 
         function ejecutarLimpiarModal() {
             if (!sectionToClear) return;
             const tipo = sectionToClear;
-
-            if (tipo === 'inicio') {
-                state.inicio = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', timestamp: null };
-                document.getElementById('result_inicio').value = '';
-            } else if (tipo === 'yape') {
-                state.yapes = [];
-                state.yape_timestamp = null;
-                document.getElementById('result_yape').value = '';
-            } else if (tipo === 'needs') {
-                state.needs = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null };
-                document.getElementById('result_needs').value = '';
-            } else if (tipo === 'ingresos') {
-                state.ingresos = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null };
-                document.getElementById('result_ingresos').value = '';
-            } else if (tipo === 'gastos') {
-                state.gastos = { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', timestamp: null };
-                document.getElementById('result_gastos').value = '';
-            } else if (tipo === 'fin') {
-                state.fin = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null };
-                document.getElementById('result_fin').value = '';
-            }
+            if (tipo === 'inicio') { state.inicio = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', timestamp: null }; document.getElementById('result_inicio').value = ''; }
+            else if (tipo === 'yape') { state.yapes = []; state.yape_timestamp = null; document.getElementById('result_yape').value = ''; }
+            else if (tipo === 'needs') { state.needs = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null }; document.getElementById('result_needs').value = ''; }
+            else if (tipo === 'ingresos') { state.ingresos = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null }; document.getElementById('result_ingresos').value = ''; }
+            else if (tipo === 'gastos') { state.gastos = { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', timestamp: null }; document.getElementById('result_gastos').value = ''; }
+            else if (tipo === 'fin') { state.fin = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null }; document.getElementById('result_fin').value = ''; }
 
             restoreFormValues();
             saveState();
             renderYapesList();
             toggleSueldoInput();
 
-            const modalConfirmEl = document.getElementById('modalConfirmClear');
-            const modalInstance = bootstrap.Modal.getInstance(modalConfirmEl);
+            const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modalConfirmClear'));
             if (modalInstance) modalInstance.hide();
-
             sectionToClear = null;
             showToast("Sección limpiada correctamente");
         }
 
-        // GENERADORES DE INFORMES
         function generarInformeInicio() {
             saveState();
-            if (!hasDataInicio()) {
-                showToast("No se puede generar el informe por falta de datos", true);
-                document.getElementById('result_inicio').value = "";
-                return "";
-            }
-            if (!state.inicio.timestamp) {
-                state.inicio.timestamp = getFechaHoraActual();
-                saveState();
-            }
+            if (!hasDataInicio()) { showToast("Faltan datos en Inicio", true); document.getElementById('result_inicio').value = ""; return ""; }
+            if (!state.inicio.timestamp) { state.inicio.timestamp = getFechaHoraActual(); saveState(); }
             const i = state.inicio;
-            const texto = `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.inicio.timestamp}
----------------------------------------------
-📦 Stock Inicial de Vasos:
-📄 CARTÓN:
-- 8 oz: ${i.carton_8 || 0}
-- 12 oz: ${i.carton_12 || 0}
-- Medio Litro: ${i.carton_medio || 0}
-- Litro: ${i.carton_litro || 0}
-
-🥤 PLÁSTICO:
-- 12 oz: ${i.plastico_12 || 0}
-- Medio Litro: ${i.plastico_medio || 0}
----------------------------------------------
-Estado: Día iniciado correctamente.`;
+            const texto = `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.inicio.timestamp}\n---------------------------------------------\n📦 Stock Inicial de Vasos:\n📄 CARTÓN:\n- 8 oz: ${i.carton_8 || 0}\n- 12 oz: ${i.carton_12 || 0}\n- Medio Litro: ${i.carton_medio || 0}\n- Litro: ${i.carton_litro || 0}\n\n🥤 PLÁSTICO:\n- 12 oz: ${i.plastico_12 || 0}\n- Medio Litro: ${i.plastico_medio || 0}\n---------------------------------------------\nEstado: Día iniciado correctamente.`;
             document.getElementById('result_inicio').value = texto;
             updateStatusBadges();
             return texto;
@@ -1354,10 +1360,8 @@ Estado: Día iniciado correctamente.`;
         function renderYapesList() {
             const container = document.getElementById('yapes_lista_container');
             const total = state.yapes.reduce((a,b)=>a+b, 0);
-
             document.getElementById('dash_yape_count').innerText = state.yapes.length;
             document.getElementById('dash_yape_total').innerText = `S/ ${total.toFixed(2)}`;
-            
             const finYapeEl = document.getElementById('fin_monto_yape');
             if(finYapeEl) finYapeEl.value = total.toFixed(2);
 
@@ -1376,7 +1380,6 @@ Estado: Día iniciado correctamente.`;
                 html += `<div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom"><span class="small fw-semibold">#${idx + 1} - S/ ${m.toFixed(2)}</span><button class="btn btn-sm text-danger p-0" onclick="eliminarYape(${idx})"><i class="fa-solid fa-xmark"></i></button></div>`;
             });
             container.innerHTML = html;
-
             document.getElementById('yape_cadena_preview').innerText = state.yapes.join(' + ');
             document.getElementById('yape_count_preview').innerText = state.yapes.length;
             document.getElementById('yape_total_preview').innerText = `S/ ${total.toFixed(2)}`;
@@ -1384,28 +1387,10 @@ Estado: Día iniciado correctamente.`;
         }
 
         function generarInformeYapes() {
-            if (!hasDataYapes()) {
-                showToast("No se puede generar el informe por falta de datos", true);
-                document.getElementById('result_yape').value = "";
-                return "";
-            }
-            if (!state.yape_timestamp) {
-                state.yape_timestamp = getFechaHoraActual();
-                saveState();
-            }
+            if (!hasDataYapes()) { showToast("No hay Yapes ingresados", true); document.getElementById('result_yape').value = ""; return ""; }
+            if (!state.yape_timestamp) { state.yape_timestamp = getFechaHoraActual(); saveState(); }
             const total = state.yapes.reduce((a,b)=>a+b, 0);
-            const desglose = state.yapes.length > 0 ? state.yapes.join(' + ') : '0';
-            const texto = `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.yape_timestamp}
----------------------------------------------
-🔢 Desglose:
-${desglose}
-
-📊 Resumen:
-- Total Yapes: ${state.yapes.length}
-- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}
----------------------------------------------`;
+            const texto = `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.yape_timestamp}\n---------------------------------------------\n🔢 Desglose:\n${state.yapes.join(' + ')}\n\n📊 Resumen:\n- Total Yapes: ${state.yapes.length}\n- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}\n---------------------------------------------`;
             document.getElementById('result_yape').value = texto;
             updateStatusBadges();
             return texto;
@@ -1414,29 +1399,22 @@ ${desglose}
         function generarInformeNeeds() {
             saveState();
             state.needs.generated = true;
-            if (!state.needs.timestamp) {
-                state.needs.timestamp = getFechaHoraActual();
-            }
+            if (!state.needs.timestamp) state.needs.timestamp = getFechaHoraActual();
             saveState();
-
             const n = state.needs;
             let arr = [];
-
             if (parseInt(n.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${n.cucharas_chicas} paq.`);
             if (parseInt(n.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${n.cucharas_grandes} paq.`);
             if (parseInt(n.servilletas) > 0) arr.push(`- Servilletas: ${n.servilletas} paq.`);
             if (parseInt(n.sorbetes) > 0) arr.push(`- Sorbetes: ${n.sorbetes} paq.`);
             if (parseInt(n.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${n.bolsas_chicas} paq.`);
             if (parseInt(n.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${n.bolsas_medianas} paq.`);
-
             if (parseInt(n.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${n.carton_8} paq.`);
             if (parseInt(n.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${n.carton_12} paq.`);
             if (parseInt(n.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${n.carton_medio} paq.`);
             if (parseInt(n.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${n.carton_litro} paq.`);
-
             if (parseInt(n.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${n.plastico_12} paq.`);
             if (parseInt(n.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${n.plastico_medio} paq.`);
-
             if (parseInt(n.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${n.tapas_8} paq.`);
             if (parseInt(n.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${n.tapas_12} paq.`);
             if (parseInt(n.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${n.tapas_medio} paq.`);
@@ -1448,10 +1426,7 @@ ${desglose}
             if (n.detergente) clean.push("Detergente");
             if (n.guantes) clean.push("Guantes");
 
-            let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.needs.timestamp}
----------------------------------------------`;
+            let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.needs.timestamp}\n---------------------------------------------`;
             if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES:\n` + arr.join('\n');
             if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA:\n- ` + clean.join(', ');
             if (arr.length === 0 && clean.length === 0) texto += `\n(Sin faltantes registrados)`;
@@ -1465,29 +1440,22 @@ ${desglose}
         function generarInformeIngresos() {
             saveState();
             state.ingresos.generated = true;
-            if (!state.ingresos.timestamp) {
-                state.ingresos.timestamp = getFechaHoraActual();
-            }
+            if (!state.ingresos.timestamp) state.ingresos.timestamp = getFechaHoraActual();
             saveState();
-
             const ing = state.ingresos;
             let arr = [];
-
             if (parseInt(ing.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${ing.cucharas_chicas} paq.`);
             if (parseInt(ing.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${ing.cucharas_grandes} paq.`);
             if (parseInt(ing.servilletas) > 0) arr.push(`- Servilletas: ${ing.servilletas} paq.`);
             if (parseInt(ing.sorbetes) > 0) arr.push(`- Sorbetes: ${ing.sorbetes} paq.`);
             if (parseInt(ing.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${ing.bolsas_chicas} paq.`);
             if (parseInt(ing.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${ing.bolsas_medianas} paq.`);
-
             if (parseInt(ing.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${ing.carton_8}`);
             if (parseInt(ing.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${ing.carton_12}`);
             if (parseInt(ing.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${ing.carton_medio}`);
             if (parseInt(ing.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${ing.carton_litro}`);
-
             if (parseInt(ing.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${ing.plastico_12}`);
             if (parseInt(ing.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${ing.plastico_medio}`);
-
             if (parseInt(ing.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${ing.tapas_8} paq.`);
             if (parseInt(ing.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${ing.tapas_12} paq.`);
             if (parseInt(ing.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${ing.tapas_medio} paq.`);
@@ -1499,13 +1467,10 @@ ${desglose}
             if (ing.detergente) clean.push("Detergente");
             if (ing.guantes) clean.push("Guantes");
 
-            let texto = `📦 INFORME DE INGRESOS DE STOCK - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.ingresos.timestamp}
----------------------------------------------`;
+            let texto = `📦 INFORME DE INGRESOS DE STOCK - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.ingresos.timestamp}\n---------------------------------------------`;
             if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES INGRESADOS:\n` + arr.join('\n');
             if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA INGRESADA:\n- ` + clean.join(', ');
-            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin ingresos registrados en el turno)`;
+            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin ingresos registrados)`;
             texto += `\n---------------------------------------------`;
 
             document.getElementById('result_ingresos').value = texto;
@@ -1516,48 +1481,22 @@ ${desglose}
         function generarInformeGastos() {
             saveState();
             const g = state.gastos;
-
             if (g.sueldo && (!g.sueldo_personas || parseInt(g.sueldo_personas) <= 0)) {
                 showToast("Ingresa la cantidad de personas para Sueldo", true);
                 document.getElementById('result_gastos').value = "";
                 return "";
             }
+            if (!hasDataGastos()) { showToast("No hay gastos registrados", true); document.getElementById('result_gastos').value = ""; return ""; }
+            if (!state.gastos.timestamp) { state.gastos.timestamp = getFechaHoraActual(); saveState(); }
 
-            if (!hasDataGastos()) {
-                showToast("No se puede generar el informe por falta de datos", true);
-                document.getElementById('result_gastos').value = "";
-                return "";
-            }
-            if (!state.gastos.timestamp) {
-                state.gastos.timestamp = getFechaHoraActual();
-                saveState();
-            }
-            
             let arrGastos = [];
-
             if (g.bebidas) arrGastos.push("- Consumo de Bebidas");
-            if (g.sueldo) {
-                let pers = g.sueldo_personas ? ` (${g.sueldo_personas} pers.)` : '';
-                arrGastos.push(`- Sueldo Personal${pers}`);
-            }
+            if (g.sueldo) arrGastos.push(`- Sueldo Personal (${g.sueldo_personas} pers.)`);
             if (g.cochera) arrGastos.push("- Cochera");
             if (g.guarderia) arrGastos.push("- Guardería");
-            if (g.otros_detalle && g.otros_detalle.trim().length > 0) {
-                arrGastos.push(`- Otros: ${g.otros_detalle.trim()}`);
-            }
+            if (g.otros_detalle && g.otros_detalle.trim().length > 0) arrGastos.push(`- Otros: ${g.otros_detalle.trim()}`);
 
-            let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.gastos.timestamp}
----------------------------------------------`;
-
-            if (arrGastos.length > 0) {
-                texto += `\n📋 GASTOS REGISTRADOS:\n` + arrGastos.join('\n');
-            } else {
-                texto += `\n(Sin gastos registrados en el turno)`;
-            }
-            texto += `\n---------------------------------------------`;
-
+            let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.gastos.timestamp}\n---------------------------------------------\n📋 GASTOS REGISTRADOS:\n` + arrGastos.join('\n') + `\n---------------------------------------------`;
             document.getElementById('result_gastos').value = texto;
             updateStatusBadges();
             return texto;
@@ -1565,317 +1504,80 @@ ${desglose}
 
         function generarInformeFin() {
             saveState();
-            if (!hasDataInicio()) {
-                showToast("Primero debes registrar el Inicio del Día", true);
-                document.getElementById('result_fin').value = "";
-                return "";
-            }
-            if (!hasDataFin()) {
-                showToast("No se puede generar el informe por falta de datos", true);
-                document.getElementById('result_fin').value = "";
-                return "";
-            }
-            if (!state.fin.timestamp) {
-                state.fin.timestamp = getFechaHoraActual();
-                saveState();
-            }
+            if (!hasDataInicio()) { showToast("Primero registra el Inicio del Día", true); document.getElementById('result_fin').value = ""; return ""; }
+            if (!hasDataFin()) { showToast("Faltan datos en el cierre", true); document.getElementById('result_fin').value = ""; return ""; }
+            if (!state.fin.timestamp) { state.fin.timestamp = getFechaHoraActual(); saveState(); }
 
-            const ini = state.inicio;
-            const ing = state.ingresos;
-            const fin = state.fin;
-
-            const calcVentas = (i, ingreso, f) => {
-                const totalDisponible = (parseInt(i) || 0) + (parseInt(ingreso) || 0);
-                return Math.max(0, totalDisponible - (parseInt(f) || 0));
-            };
-
+            const ini = state.inicio, ing = state.ingresos, fin = state.fin;
+            const calcVentas = (i, ingreso, f) => Math.max(0, ((parseInt(i) || 0) + (parseInt(ingreso) || 0)) - (parseInt(f) || 0));
             const montoYape = state.yapes.reduce((a,b)=>a+b,0);
             const montoEfectivo = parseFloat(fin.efectivo) || 0;
 
-            const texto = `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora: ${state.fin.timestamp}
----------------------------------------------
-🥤 Vasos Vendidos / Sobrantes:
-📄 CARTÓN:
-- 8 oz: ${calcVentas(ini.carton_8, ing.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})
-- 12 oz: ${calcVentas(ini.carton_12, ing.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})
-- Medio Litro: ${calcVentas(ini.carton_medio, ing.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})
-- Litro: ${calcVentas(ini.carton_litro, ing.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})
-
-🥤 PLÁSTICO:
-- 12 oz: ${calcVentas(ini.plastico_12, ing.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})
-- Medio Litro: ${calcVentas(ini.plastico_medio, ing.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})
-
-💰 Dinero:
-- Yape: S/ ${montoYape.toFixed(2)}
-- Efectivo: S/ ${montoEfectivo.toFixed(2)}
-- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}
----------------------------------------------`;
-
+            const texto = `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.fin.timestamp}\n---------------------------------------------\n🥤 Vasos Vendidos / Sobrantes:\n📄 CARTÓN:\n- 8 oz: ${calcVentas(ini.carton_8, ing.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})\n- 12 oz: ${calcVentas(ini.carton_12, ing.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})\n- Medio Litro: ${calcVentas(ini.carton_medio, ing.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})\n- Litro: ${calcVentas(ini.carton_litro, ing.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})\n\n🥤 PLÁSTICO:\n- 12 oz: ${calcVentas(ini.plastico_12, ing.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})\n- Medio Litro: ${calcVentas(ini.plastico_medio, ing.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})\n\n💰 Dinero:\n- Yape: S/ ${montoYape.toFixed(2)}\n- Efectivo: S/ ${montoEfectivo.toFixed(2)}\n- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}\n---------------------------------------------`;
             document.getElementById('result_fin').value = texto;
             updateStatusBadges();
             return texto;
         }
 
-        // REPORTES RAW PARA CONSOLIDADO
-        function getRawInicio() {
-            if (!hasDataInicio()) return "";
-            const i = state.inicio;
-            return `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${i.timestamp || getFechaHoraActual()}
----------------------------------------------
-📦 Stock Inicial de Vasos:
-📄 CARTÓN:
-- 8 oz: ${i.carton_8 || 0}
-- 12 oz: ${i.carton_12 || 0}
-- Medio Litro: ${i.carton_medio || 0}
-- Litro: ${i.carton_litro || 0}
-
-🥤 PLÁSTICO:
-- 12 oz: ${i.plastico_12 || 0}
-- Medio Litro: ${i.plastico_medio || 0}
----------------------------------------------
-Estado: Día iniciado correctamente.`;
-        }
-
-        function getRawYapes() {
-            if (!hasDataYapes()) return "";
-            const total = state.yapes.reduce((a,b)=>a+b, 0);
-            const desglose = state.yapes.length > 0 ? state.yapes.join(' + ') : '0';
-            return `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${state.yape_timestamp || getFechaHoraActual()}
----------------------------------------------
-🔢 Desglose:
-${desglose}
-
-📊 Resumen:
-- Total Yapes: ${state.yapes.length}
-- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}
----------------------------------------------`;
-        }
-
-        function getRawNeeds() {
-            const n = state.needs;
-            let arr = [];
-
-            if (parseInt(n.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${n.cucharas_chicas} paq.`);
-            if (parseInt(n.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${n.cucharas_grandes} paq.`);
-            if (parseInt(n.servilletas) > 0) arr.push(`- Servilletas: ${n.servilletas} paq.`);
-            if (parseInt(n.sorbetes) > 0) arr.push(`- Sorbetes: ${n.sorbetes} paq.`);
-            if (parseInt(n.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${n.bolsas_chicas} paq.`);
-            if (parseInt(n.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${n.bolsas_medianas} paq.`);
-
-            if (parseInt(n.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${n.carton_8} paq.`);
-            if (parseInt(n.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${n.carton_12} paq.`);
-            if (parseInt(n.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${n.carton_medio} paq.`);
-            if (parseInt(n.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${n.carton_litro} paq.`);
-
-            if (parseInt(n.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${n.plastico_12} paq.`);
-            if (parseInt(n.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${n.plastico_medio} paq.`);
-
-            if (parseInt(n.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${n.tapas_8} paq.`);
-            if (parseInt(n.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${n.tapas_12} paq.`);
-            if (parseInt(n.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${n.tapas_medio} paq.`);
-            if (parseInt(n.tapas_litro) > 0) arr.push(`- Tapas Cartón 1L: ${n.tapas_litro} paq.`);
-
-            let clean = [];
-            if (n.lejia) clean.push("Lejía");
-            if (n.trapo) clean.push("Trapo");
-            if (n.detergente) clean.push("Detergente");
-            if (n.guantes) clean.push("Guantes");
-
-            let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${n.timestamp || getFechaHoraActual()}
----------------------------------------------`;
-            if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES:\n` + arr.join('\n');
-            if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA:\n- ` + clean.join(', ');
-            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin faltantes registrados)`;
-            texto += `\n---------------------------------------------`;
-            return texto;
-        }
-
-        function getRawIngresos() {
-            const ing = state.ingresos;
-            let arr = [];
-
-            if (parseInt(ing.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${ing.cucharas_chicas} paq.`);
-            if (parseInt(ing.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${ing.cucharas_grandes} paq.`);
-            if (parseInt(ing.servilletas) > 0) arr.push(`- Servilletas: ${ing.servilletas} paq.`);
-            if (parseInt(ing.sorbetes) > 0) arr.push(`- Sorbetes: ${ing.sorbetes} paq.`);
-            if (parseInt(ing.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${ing.bolsas_chicas} paq.`);
-            if (parseInt(ing.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${ing.bolsas_medianas} paq.`);
-
-            if (parseInt(ing.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${ing.carton_8}`);
-            if (parseInt(ing.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${ing.carton_12}`);
-            if (parseInt(ing.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${ing.carton_medio}`);
-            if (parseInt(ing.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${ing.carton_litro}`);
-
-            if (parseInt(ing.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${ing.plastico_12}`);
-            if (parseInt(ing.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${ing.plastico_medio}`);
-
-            if (parseInt(ing.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${ing.tapas_8} paq.`);
-            if (parseInt(ing.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${ing.tapas_12} paq.`);
-            if (parseInt(ing.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${ing.tapas_medio} paq.`);
-            if (parseInt(ing.tapas_litro) > 0) arr.push(`- Tapas Cartón 1L: ${ing.tapas_litro} paq.`);
-
-            let clean = [];
-            if (ing.lejia) clean.push("Lejía");
-            if (ing.trapo) clean.push("Trapo");
-            if (ing.detergente) clean.push("Detergente");
-            if (ing.guantes) clean.push("Guantes");
-
-            let texto = `📦 INFORME DE INGRESOS DE STOCK - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${ing.timestamp || getFechaHoraActual()}
----------------------------------------------`;
-            if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES INGRESADOS:\n` + arr.join('\n');
-            if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA INGRESADA:\n- ` + clean.join(', ');
-            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin ingresos registrados en el turno)`;
-            texto += `\n---------------------------------------------`;
-            return texto;
-        }
-
-        function getRawGastos() {
-            if (!hasDataGastos()) return "";
-            const g = state.gastos;
-            let arrGastos = [];
-
-            if (g.bebidas) arrGastos.push("- Consumo de Bebidas");
-            if (g.sueldo) {
-                let pers = g.sueldo_personas ? ` (${g.sueldo_personas} pers.)` : '';
-                arrGastos.push(`- Sueldo Personal${pers}`);
-            }
-            if (g.cochera) arrGastos.push("- Cochera");
-            if (g.guarderia) arrGastos.push("- Guardería");
-            if (g.otros_detalle && g.otros_detalle.trim().length > 0) {
-                arrGastos.push(`- Otros: ${g.otros_detalle.trim()}`);
-            }
-
-            let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${g.timestamp || getFechaHoraActual()}
----------------------------------------------`;
-            if (arrGastos.length > 0) {
-                texto += `\n📋 GASTOS REGISTRADOS:\n` + arrGastos.join('\n');
-            } else {
-                texto += `\n(Sin gastos registrados en el turno)`;
-            }
-            texto += `\n---------------------------------------------`;
-            return texto;
-        }
-
-        function getRawFin() {
-            if (!hasDataFin()) return "";
-            const ini = state.inicio;
-            const ing = state.ingresos;
-            const fin = state.fin;
-
-            const calcVentas = (i, ingreso, f) => {
-                const totalDisponible = (parseInt(i) || 0) + (parseInt(ingreso) || 0);
-                return Math.max(0, totalDisponible - (parseInt(f) || 0));
-            };
-
-            const montoYape = state.yapes.reduce((a,b)=>a+b,0);
-            const montoEfectivo = parseFloat(fin.efectivo) || 0;
-
-            return `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${fin.timestamp || getFechaHoraActual()}
----------------------------------------------
-🥤 Vasos Vendidos / Sobrantes:
-📄 CARTÓN:
-- 8 oz: ${calcVentas(ini.carton_8, ing.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})
-- 12 oz: ${calcVentas(ini.carton_12, ing.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})
-- Medio Litro: ${calcVentas(ini.carton_medio, ing.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})
-- Litro: ${calcVentas(ini.carton_litro, ing.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})
-
-🥤 PLÁSTICO:
-- 12 oz: ${calcVentas(ini.plastico_12, ing.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})
-- Medio Litro: ${calcVentas(ini.plastico_medio, ing.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})
-
-💰 Dinero:
-- Yape: S/ ${montoYape.toFixed(2)}
-- Efectivo: S/ ${montoEfectivo.toFixed(2)}
-- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}
----------------------------------------------`;
-        }
-
-        // COPIAR RESUMEN GENERAL
-        function copiarResumenGeneral() {
+        function getRawConsolidadoText() {
             saveState();
-
-            if (state.gastos.sueldo && (!state.gastos.sueldo_personas || parseInt(state.gastos.sueldo_personas) <= 0)) {
-                showToast("Ingresa la cantidad de personas para Sueldo en Gastos", true);
-                return;
-            }
-
-            const tieneAlgúnDato = hasDataInicio() || hasDataYapes() || hasDataGastos() || hasDataFin();
-
-            if (!tieneAlgúnDato) {
-                showToast("No se puede copiar el resumen por falta de datos", true);
-                return;
-            }
-
             let bloques = [];
-            let iText = getRawInicio(); if (iText) bloques.push(iText);
-            let yText = getRawYapes(); if (yText) bloques.push(yText);
-            
+            if (hasDataInicio()) bloques.push(getRawInicio());
+            if (hasDataYapes()) bloques.push(getRawYapes());
             bloques.push(getRawNeeds());
             bloques.push(getRawIngresos());
+            if (hasDataGastos()) bloques.push(getRawGastos());
+            if (hasDataFin()) bloques.push(getRawFin());
 
-            let gText = getRawGastos(); if (gText) bloques.push(gText);
-            let fText = getRawFin(); if (fText) bloques.push(fText);
+            return `=============================================\n🌟 CONSOLIDADO GENERAL - ORNELA CREMOLADAS 🌟\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${getFechaHoraActual()}\n=============================================\n\n` + bloques.join('\n\n') + `\n\n=============================================\n✅ Fin del Reporte Consolidado`;
+        }
 
-            const textoGeneral = `=============================================
-🌟 CONSOLIDADO GENERAL - ORNELA CREMOLADAS 🌟
-📍 PUESTO: ${getPuestoActual()}
-📅 Fecha y Hora Generado: ${getFechaHoraActual()}
-=============================================
+        function getRawInicio() {
+            const i = state.inicio;
+            return `☀️ INFORME DE INICIO\n- 8oz: ${i.carton_8||0} | 12oz: ${i.carton_12||0} | 1/2L: ${i.carton_medio||0} | 1L: ${i.carton_litro||0}`;
+        }
+        function getRawYapes() {
+            const total = state.yapes.reduce((a,b)=>a+b, 0);
+            return `📱 YAPES: ${state.yapes.join(' + ')} = S/ ${total.toFixed(2)}`;
+        }
+        function getRawNeeds() { return generarInformeNeeds(); }
+        function getRawIngresos() { return generarInformeIngresos(); }
+        function getRawGastos() { return generarInformeGastos(); }
+        function getRawFin() { return generarInformeFin(); }
 
-` + bloques.join('\n\n') + `
-
-=============================================
-✅ Fin del Reporte Consolidado del Turno`;
+        function copiarResumenGeneral() {
+            const textoGeneral = getRawConsolidadoText();
+            document.getElementById('result_consolidado').value = textoGeneral;
+            
+            const modalEl = document.getElementById('modalConsolidado');
+            let modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (!modalInstance) {
+                new bootstrap.Modal(modalEl).show();
+            }
 
             navigator.clipboard.writeText(textoGeneral).then(() => {
-                showToast("¡Resumen general copiado al portapapeles!");
+                showToast("¡Consolidado copiado al portapapeles!");
             }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = textoGeneral;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast("¡Resumen general copiado!");
+                showToast("Consolidado generado listo para copiar", false);
             });
         }
 
-        // COPIAR INDIVIDUAL POR MODAL
-        function copiarInforme(elementId, tipo) {
-            let hasData = true;
-
-            if (tipo === 'inicio') hasData = hasDataInicio();
-            if (tipo === 'yape') hasData = hasDataYapes();
-            if (tipo === 'gastos') {
-                if (state.gastos.sueldo && (!state.gastos.sueldo_personas || parseInt(state.gastos.sueldo_personas) <= 0)) {
-                    showToast("Ingresa la cantidad de personas para Sueldo", true);
-                    return;
-                }
-                hasData = hasDataGastos();
-            }
-            if (tipo === 'fin') {
-                if (!hasDataInicio()) {
-                    showToast("Primero debes registrar el Inicio del Día", true);
-                    return;
-                }
-                hasData = hasDataFin();
-            }
-
-            if (!hasData) {
-                showToast("No se puede copiar el informe por falta de datos", true);
+        function enviarWhatsApp(elementId) {
+            const txt = document.getElementById(elementId).value;
+            if (!txt.trim()) {
+                showToast("Primero genera el informe de esta sección", true);
                 return;
             }
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`, '_blank');
+        }
 
-            const txt = document.getElementById(elementId);
-            if (!txt.value.trim()) {
+        function enviarWhatsAppConsolidado() {
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(getRawConsolidadoText())}`, '_blank');
+        }
+
+        function copiarInforme(elementId, tipo) {
+            const txtFinal = document.getElementById(elementId);
+            if (!txtFinal.value.trim()) {
                 if(tipo === 'inicio') generarInformeInicio();
                 if(tipo === 'yape') generarInformeYapes();
                 if(tipo === 'needs') generarInformeNeeds();
@@ -1883,13 +1585,7 @@ ${desglose}
                 if(tipo === 'gastos') generarInformeGastos();
                 if(tipo === 'fin') generarInformeFin();
             }
-
-            const txtFinal = document.getElementById(elementId);
-            if (!txtFinal.value.trim() && tipo !== 'needs' && tipo !== 'ingresos') {
-                showToast("No se puede copiar el informe por falta de datos", true);
-                return;
-            }
-
+            if (!txtFinal.value.trim()) { showToast("Faltan datos para copiar", true); return; }
             navigator.clipboard.writeText(txtFinal.value).then(() => showToast("¡Copiado al portapapeles!"))
             .catch(() => { txtFinal.select(); document.execCommand('copy'); showToast("¡Copiado!"); });
         }
@@ -1897,20 +1593,14 @@ ${desglose}
         function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
             const icon = document.getElementById('toastIcon');
-            
-            if (isError) {
-                icon.className = "fa-solid fa-triangle-exclamation text-warning";
-            } else {
-                icon.className = "fa-solid fa-circle-check text-success";
-            }
-
+            icon.className = isError ? "fa-solid fa-triangle-exclamation text-warning" : "fa-solid fa-circle-check text-success";
             document.getElementById('toastMessage').innerText = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2800);
         }
 
         function executeReset() {
-            localStorage.removeItem('ornela_arqueo_v16');
+            localStorage.removeItem('ornela_arqueo_v17');
             location.reload();
         }
     </script>
