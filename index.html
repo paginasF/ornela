@@ -27,7 +27,7 @@
             --shadow-card: 0 20px 40px rgba(0, 120, 180, 0.12);
         }
 
-        /* PANTALLA DE CARGA (SPLASH SCREEN NATURAL Y MODERNA) */
+        /* PANTALLA DE CARGA (SPLASH SCREEN NATURAL Y ELEGANTE) */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -633,11 +633,11 @@
             </button>
 
             <!-- Consolidado General -->
-            <button class="action-item" type="button" onclick="copiarResumenGeneral()">
+            <button class="action-item" type="button" onclick="abrirConsolidadoModal()">
                 <div class="icon-box icon-general"><i class="fa-solid fa-clipboard-list"></i></div>
                 <div class="item-info">
                     <p class="item-title">Consolidado General</p>
-                    <p class="item-desc">Copiar o enviar resumen completo</p>
+                    <p class="item-desc">Ver, copiar o enviar resumen completo</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
@@ -970,9 +970,12 @@
                         <textarea id="result_consolidado" class="form-control ticket-textarea" rows="10" readonly></textarea>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center gap-2">
-                    <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarResumenGeneral()"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
-                    <button type="button" class="btn btn-sm text-white rounded-pill px-3" style="background-color: #25D366;" onclick="enviarWhatsAppConsolidado()"><i class="fa-brands fa-whatsapp me-1"></i> Enviar por WhatsApp</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-2 me-1" onclick="copiarInforme('result_consolidado', 'consolidado')"><i class="fa-regular fa-copy"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-2" style="background-color: #25D366;" onclick="enviarWhatsApp('result_consolidado')"><i class="fa-brands fa-whatsapp"></i> Enviar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1545,45 +1548,25 @@
         function getRawGastos() { return generarInformeGastos(); }
         function getRawFin() { return generarInformeFin(); }
 
-        function copiarResumenGeneral() {
+        function abrirConsolidadoModal() {
             const textoGeneral = getRawConsolidadoText();
             document.getElementById('result_consolidado').value = textoGeneral;
-            
-            const modalEl = document.getElementById('modalConsolidado');
-            let modalInstance = bootstrap.Modal.getInstance(modalEl);
-            if (!modalInstance) {
-                new bootstrap.Modal(modalEl).show();
-            }
-
-            navigator.clipboard.writeText(textoGeneral).then(() => {
-                showToast("¡Consolidado copiado al portapapeles!");
-            }).catch(() => {
-                showToast("Consolidado generado listo para copiar", false);
-            });
+            new bootstrap.Modal(document.getElementById('modalConsolidado')).show();
         }
 
         function enviarWhatsApp(elementId) {
             const txt = document.getElementById(elementId).value;
             if (!txt.trim()) {
-                showToast("Primero genera el informe de esta sección", true);
+                showToast("No hay contenido para enviar", true);
                 return;
             }
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(txt)}`, '_blank');
         }
 
-        function enviarWhatsAppConsolidado() {
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(getRawConsolidadoText())}`, '_blank');
-        }
-
         function copiarInforme(elementId, tipo) {
             const txtFinal = document.getElementById(elementId);
-            if (!txtFinal.value.trim()) {
-                if(tipo === 'inicio') generarInformeInicio();
-                if(tipo === 'yape') generarInformeYapes();
-                if(tipo === 'needs') generarInformeNeeds();
-                if(tipo === 'ingresos') generarInformeIngresos();
-                if(tipo === 'gastos') generarInformeGastos();
-                if(tipo === 'fin') generarInformeFin();
+            if (tipo === 'consolidado' && !txtFinal.value.trim()) {
+                txtFinal.value = getRawConsolidadoText();
             }
             if (!txtFinal.value.trim()) { showToast("Faltan datos para copiar", true); return; }
             navigator.clipboard.writeText(txtFinal.value).then(() => showToast("¡Copiado al portapapeles!"))
