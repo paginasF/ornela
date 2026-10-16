@@ -11,8 +11,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Plus Jakarta Sans & Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -83,7 +83,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.2rem;
         }
 
         .turn-title {
@@ -124,6 +124,42 @@
             font-weight: 500;
         }
 
+        .puesto-selector-container {
+            background-color: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 18px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .puesto-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #1E293B;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .puesto-select {
+            border: 2px solid #CBD5E1;
+            border-radius: 12px;
+            padding: 0.35rem 0.8rem;
+            font-weight: 800;
+            font-size: 0.88rem;
+            color: #0F172A;
+            background-color: #FFFFFF;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .puesto-select:focus {
+            border-color: var(--brand-pink);
+        }
+
         .action-item {
             background-color: var(--item-bg);
             border: 1px solid var(--item-border);
@@ -139,6 +175,7 @@
             color: inherit;
             width: 100%;
             text-align: left;
+            position: relative;
         }
 
         .action-item:active {
@@ -173,6 +210,9 @@
             color: #0F172A;
             margin: 0;
             line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .item-desc {
@@ -185,6 +225,18 @@
         .item-arrow {
             color: #CBD5E1;
             font-size: 0.85rem;
+        }
+
+        .status-badge-done {
+            background-color: #DCFCE7;
+            color: #16A34A;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .summary-box {
@@ -251,12 +303,20 @@
             border-radius: 24px;
             border: none;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
         }
 
         .modal-header {
-            border-bottom: 1px solid #F1F5F9;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             padding: 1.2rem 1.5rem;
         }
+
+        .modal-header-inicio { background-color: #F0FDF4; }
+        .modal-header-yape { background-color: #FAF5FF; }
+        .modal-header-needs { background-color: #FFFBEB; }
+        .modal-header-ingresos { background-color: #F0F9FF; }
+        .modal-header-gastos { background-color: #FEF3C7; }
+        .modal-header-fin { background-color: #FFF1F2; }
 
         .modal-footer {
             border-top: 1px solid #F1F5F9;
@@ -265,6 +325,7 @@
             flex-wrap: wrap;
             gap: 6px;
             justify-content: space-between;
+            background-color: #FAFAFA;
         }
 
         .form-control {
@@ -279,15 +340,21 @@
             box-shadow: 0 0 0 3px rgba(255, 26, 131, 0.15);
         }
 
-        .form-control:disabled {
-            background-color: #F1F5F9;
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         .form-control[readonly] {
             background-color: #F8FAFC;
             cursor: not-allowed;
+        }
+
+        /* Estilo Ticket Recibo */
+        .ticket-textarea {
+            background-color: #FFFCF7 !important;
+            border: 2px dashed #CBD5E1 !important;
+            font-family: 'Space Mono', monospace !important;
+            font-size: 0.8rem !important;
+            color: #1E293B !important;
+            border-radius: 14px !important;
+            line-height: 1.45;
+            padding: 12px !important;
         }
 
         .section-tag {
@@ -347,6 +414,44 @@
         .custom-toast.show {
             transform: translateX(-50%) translateY(0);
         }
+
+        .blocked-notice {
+            background-color: #FEF2F2;
+            border: 1px dashed #EF4444;
+            color: #991B1B;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .reset-modal-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #FEF2F2;
+            color: #EF4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1rem auto;
+        }
+
+        .clear-modal-icon {
+            width: 64px;
+            height: 64px;
+            background-color: #FEF3C7;
+            color: #D97706;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1rem auto;
+        }
     </style>
 </head>
 <body>
@@ -369,11 +474,25 @@
                 </div>
             </div>
 
+            <!-- SELECTOR DE PUESTO -->
+            <div class="puesto-selector-container">
+                <div class="puesto-label">
+                    <i class="fa-solid fa-store text-primary"></i> Seleccionar Puesto:
+                </div>
+                <select id="puesto_select" class="puesto-select" onchange="saveState()">
+                    <option value="Puesto 1">Puesto 1</option>
+                    <option value="Puesto 2">Puesto 2</option>
+                </select>
+            </div>
+
             <!-- Botones de Acción -->
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalInicio">
                 <div class="icon-box icon-inicio"><i class="fa-regular fa-sun"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Inicio del día</p>
+                    <div class="item-title">
+                        <span>Inicio del día</span>
+                        <span id="badge_status_inicio" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Registrar vasos iniciales</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
@@ -382,7 +501,10 @@
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalYape">
                 <div class="icon-box icon-yape"><i class="fa-solid fa-wallet"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Yapes del día</p>
+                    <div class="item-title">
+                        <span>Yapes del día</span>
+                        <span id="badge_status_yapes" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Registrar pagos recibidos</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
@@ -391,7 +513,10 @@
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalNeeds">
                 <div class="icon-box icon-needs"><i class="fa-solid fa-basket-shopping"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Necesidades / Faltantes</p>
+                    <div class="item-title">
+                        <span>Necesidades / Faltantes</span>
+                        <span id="badge_status_needs" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Pedir insumos y empaques</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
@@ -400,7 +525,10 @@
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalIngresos">
                 <div class="icon-box icon-ingresos"><i class="fa-solid fa-box-open"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Ingresos de Stock</p>
+                    <div class="item-title">
+                        <span>Ingresos de Stock</span>
+                        <span id="badge_status_ingresos" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Registrar empaques ingresados</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
@@ -409,7 +537,10 @@
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalGastos">
                 <div class="icon-box icon-gastos"><i class="fa-solid fa-receipt"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Gastos del día</p>
+                    <div class="item-title">
+                        <span>Gastos del día</span>
+                        <span id="badge_status_gastos" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Bebidas, sueldo, cochera, etc.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
@@ -418,13 +549,16 @@
             <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalFin">
                 <div class="icon-box icon-fin"><i class="fa-solid fa-moon"></i></div>
                 <div class="item-info">
-                    <p class="item-title">Fin del día</p>
+                    <div class="item-title">
+                        <span>Fin del día</span>
+                        <span id="badge_status_fin" class="status-badge-done d-none"><i class="fa-solid fa-check"></i> Listo</span>
+                    </div>
                     <p class="item-desc">Registrar cierre de caja</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
 
-            <!-- BOTÓN EN PANTALLA PRINCIPAL: Copiar Resumen General -->
+            <!-- Copiar Resumen General -->
             <button class="action-item" type="button" onclick="copiarResumenGeneral()">
                 <div class="icon-box icon-general"><i class="fa-solid fa-clipboard-list"></i></div>
                 <div class="item-info">
@@ -451,7 +585,7 @@
             <div class="footer-note">
                 <i class="fa-solid fa-check text-success"></i> Guardado automático en este dispositivo
             </div>
-            <button class="btn-reset-link" type="button" onclick="confirmReset()">
+            <button class="btn-reset-link" type="button" data-bs-toggle="modal" data-bs-target="#modalReset">
                 <i class="fa-solid fa-rotate-right"></i> Reiniciar día / Nuevo turno
             </button>
         </div>
@@ -461,35 +595,35 @@
     <div class="modal fade" id="modalInicio" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-inicio">
                     <h6 class="modal-title fw-bold text-success"><i class="fa-regular fa-sun me-2"></i>Inicio del Día</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <span class="section-tag text-primary">Vasos de Cartón</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" id="init_carton_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="init_carton_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="init_carton_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" id="init_carton_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" inputmode="decimal" id="init_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="init_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="init_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" inputmode="decimal" id="init_carton_litro" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">Vasos de Plástico</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="init_plastico_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="init_plastico_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="init_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="init_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
 
                     <div class="mt-3">
-                        <label class="small fw-bold text-dark">Informe Generado:</label>
-                        <textarea id="result_inicio" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe Generado:</label>
+                        <textarea id="result_inicio" class="form-control ticket-textarea" rows="6" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('inicio', 'Inicio del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
                         <button type="button" class="btn btn-sm btn-success rounded-pill px-3 me-1" onclick="generarInformeInicio()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_inicio')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_inicio', 'inicio')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
                 </div>
             </div>
@@ -500,7 +634,7 @@
     <div class="modal fade" id="modalYape" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-yape">
                     <h6 class="modal-title fw-bold" style="color: #9333EA;"><i class="fa-solid fa-wallet me-2"></i>Yapes del Día</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -508,7 +642,7 @@
                     <label class="small fw-bold text-dark mb-1">Ingresar Monto:</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text fw-bold">S/</span>
-                        <input type="number" step="0.01" id="yape_input_monto" class="form-control" placeholder="Ej. 10.00">
+                        <input type="number" step="0.01" inputmode="decimal" id="yape_input_monto" class="form-control" placeholder="Ej. 10.00">
                         <button class="btn btn-dark fw-bold px-3" type="button" onclick="agregarYape()"><i class="fa-solid fa-plus"></i> Agregar</button>
                     </div>
 
@@ -529,15 +663,15 @@
                     </div>
 
                     <div>
-                        <label class="small fw-bold text-dark">Informe:</label>
-                        <textarea id="result_yape" class="form-control font-monospace bg-light" rows="5" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe:</label>
+                        <textarea id="result_yape" class="form-control ticket-textarea" rows="5" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('yape', 'Yapes del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
                         <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #9333EA;" onclick="generarInformeYapes()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_yape')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_yape', 'yape')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
                 </div>
             </div>
@@ -548,41 +682,41 @@
     <div class="modal fade" id="modalNeeds" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-needs">
                     <h6 class="modal-title fw-bold text-warning"><i class="fa-solid fa-basket-shopping me-2"></i>Necesidades / Faltantes</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <span class="section-tag">1. Cubiertos y Servilletas (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-4"><label class="small text-muted">Cuchara Ch.</label><input type="number" id="need_cucharas_chicas" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" id="need_cucharas_grandes" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" id="need_servilletas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Cuchara Ch.</label><input type="number" inputmode="decimal" id="need_cucharas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" inputmode="decimal" id="need_cucharas_grandes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" inputmode="decimal" id="need_servilletas" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag">2. Sorbetes y Bolsas (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" id="need_sorbetes" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" id="need_bolsas_chicas" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" id="need_bolsas_medianas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" inputmode="decimal" id="need_sorbetes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" inputmode="decimal" id="need_bolsas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" inputmode="decimal" id="need_bolsas_medianas" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag">3. Vasos (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" id="need_carton_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" id="need_carton_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 1/2L</label><input type="number" id="need_carton_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 1L</label><input type="number" id="need_carton_litro" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" id="need_plastico_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" id="need_plastico_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" inputmode="decimal" id="need_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" inputmode="decimal" id="need_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1/2L</label><input type="number" inputmode="decimal" id="need_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1L</label><input type="number" inputmode="decimal" id="need_carton_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" inputmode="decimal" id="need_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" inputmode="decimal" id="need_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag">4. Tapas de Cartón (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" id="need_tapas_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 12oz</label><input type="number" id="need_tapas_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" id="need_tapas_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" id="need_tapas_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" inputmode="decimal" id="need_tapas_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 12oz</label><input type="number" inputmode="decimal" id="need_tapas_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" inputmode="decimal" id="need_tapas_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" inputmode="decimal" id="need_tapas_litro" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag">5. Insumos de Limpieza</span>
@@ -594,15 +728,15 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="small fw-bold text-dark">Informe de Faltantes:</label>
-                        <textarea id="result_needs" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe de Faltantes:</label>
+                        <textarea id="result_needs" class="form-control ticket-textarea" rows="6" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('needs', 'Necesidades')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
                         <button type="button" class="btn btn-sm btn-warning text-white rounded-pill px-3 me-1" onclick="generarInformeNeeds()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_needs')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_needs', 'needs')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
                 </div>
             </div>
@@ -613,41 +747,41 @@
     <div class="modal fade" id="modalIngresos" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-ingresos">
                     <h6 class="modal-title fw-bold" style="color: #0284C7;"><i class="fa-solid fa-box-open me-2"></i>Ingresos de Stock</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <span class="section-tag text-info">1. Cubiertos y Servilletas (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-4"><label class="small text-muted">Cuchara Ch.</label><input type="number" id="ing_cucharas_chicas" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" id="ing_cucharas_grandes" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" id="ing_servilletas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Cuchara Ch.</label><input type="number" inputmode="decimal" id="ing_cucharas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" inputmode="decimal" id="ing_cucharas_grandes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" inputmode="decimal" id="ing_servilletas" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">2. Sorbetes y Bolsas (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" id="ing_sorbetes" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" id="ing_bolsas_chicas" class="form-control" placeholder="0"></div>
-                        <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" id="ing_bolsas_medianas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" inputmode="decimal" id="ing_sorbetes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" inputmode="decimal" id="ing_bolsas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" inputmode="decimal" id="ing_bolsas_medianas" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">3. Vasos (Unidades / Paquetes Ingresados)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" id="ing_carton_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" id="ing_carton_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 1/2L</label><input type="number" id="ing_carton_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Cartón 1L</label><input type="number" id="ing_carton_litro" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" id="ing_plastico_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" id="ing_plastico_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" inputmode="decimal" id="ing_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" inputmode="decimal" id="ing_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1/2L</label><input type="number" inputmode="decimal" id="ing_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1L</label><input type="number" inputmode="decimal" id="ing_carton_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" inputmode="decimal" id="ing_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" inputmode="decimal" id="ing_plastico_medio" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">4. Tapas de Cartón (Paquetes)</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" id="ing_tapas_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 12oz</label><input type="number" id="ing_tapas_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" id="ing_tapas_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" id="ing_tapas_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" inputmode="decimal" id="ing_tapas_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 12oz</label><input type="number" inputmode="decimal" id="ing_tapas_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" inputmode="decimal" id="ing_tapas_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" inputmode="decimal" id="ing_tapas_litro" class="form-control" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">5. Insumos de Limpieza</span>
@@ -659,15 +793,15 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="small fw-bold text-dark">Informe de Ingresos:</label>
-                        <textarea id="result_ingresos" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe de Ingresos:</label>
+                        <textarea id="result_ingresos" class="form-control ticket-textarea" rows="6" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('ingresos', 'Ingresos de Stock')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
                         <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #0284C7;" onclick="generarInformeIngresos()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_ingresos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_ingresos', 'ingresos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
                 </div>
             </div>
@@ -678,7 +812,7 @@
     <div class="modal fade" id="modalGastos" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-gastos">
                     <h6 class="modal-title fw-bold" style="color: #D97706 !important;"><i class="fa-solid fa-receipt me-2"></i>Gastos del Día</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -701,7 +835,7 @@
 
                     <div class="mb-3 ps-2" id="sueldo_personas_container">
                         <label class="small text-muted fw-semibold">Cantidad de personas (Sueldo):</label>
-                        <input type="number" id="gasto_sueldo_personas" class="form-control mt-1" placeholder="Ej. 2" disabled>
+                        <input type="number" inputmode="decimal" id="gasto_sueldo_personas" class="form-control mt-1" placeholder="Ej. 2" disabled>
                     </div>
 
                     <span class="section-tag text-dark">Otros Gastos (Detalle)</span>
@@ -710,15 +844,15 @@
                     </div>
 
                     <div class="mt-3">
-                        <label class="small fw-bold text-dark">Informe de Gastos:</label>
-                        <textarea id="result_gastos" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe de Gastos:</label>
+                        <textarea id="result_gastos" class="form-control ticket-textarea" rows="6" readonly></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('gastos', 'Gastos del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
                     <div>
                         <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #D97706;" onclick="generarInformeGastos()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_gastos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_gastos', 'gastos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
                 </div>
             </div>
@@ -729,41 +863,82 @@
     <div class="modal fade" id="modalFin" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header modal-header-fin">
                     <h6 class="modal-title fw-bold text-danger"><i class="fa-solid fa-moon me-2"></i>Fin del Día (Cierre)</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="fin_blocked_notice" class="blocked-notice d-none">
+                        <i class="fa-solid fa-lock me-1"></i> Para ingresar datos de cierre, primero debes registrar el Inicio del Día.
+                    </div>
+
                     <span class="section-tag text-primary">Sobrantes Cartón</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" id="fin_carton_8" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="fin_carton_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="fin_carton_medio" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" id="fin_carton_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" inputmode="decimal" id="fin_carton_8" class="form-control fin-field" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="fin_carton_12" class="form-control fin-field" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="fin_carton_medio" class="form-control fin-field" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" inputmode="decimal" id="fin_carton_litro" class="form-control fin-field" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-info">Sobrantes Plástico</span>
                     <div class="row g-2 mb-2">
-                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="fin_plastico_12" class="form-control" placeholder="0"></div>
-                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="fin_plastico_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" inputmode="decimal" id="fin_plastico_12" class="form-control fin-field" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" inputmode="decimal" id="fin_plastico_medio" class="form-control fin-field" placeholder="0"></div>
                     </div>
 
                     <span class="section-tag text-success">Resumen de Dinero</span>
-                    <div class="mb-2"><label class="small text-muted">Total Yape (S/)</label><input type="number" step="0.01" id="fin_monto_yape" class="form-control" placeholder="0.00" readonly></div>
-                    <div class="mb-3"><label class="small text-muted">Total Efectivo (S/)</label><input type="number" step="0.01" id="fin_monto_efectivo" class="form-control" placeholder="0.00"></div>
+                    <div class="mb-2"><label class="small text-muted">Total Yape (S/)</label><input type="number" step="0.01" inputmode="decimal" id="fin_monto_yape" class="form-control" placeholder="0.00" readonly></div>
+                    <div class="mb-3"><label class="small text-muted">Total Efectivo (S/)</label><input type="number" step="0.01" inputmode="decimal" id="fin_monto_efectivo" class="form-control fin-field" placeholder="0.00"></div>
 
                     <div class="mt-3">
-                        <label class="small fw-bold text-dark">Informe de Cierre:</label>
-                        <textarea id="result_fin" class="form-control font-monospace bg-light" rows="7" readonly></textarea>
+                        <label class="small fw-bold text-dark mb-1">Informe de Cierre:</label>
+                        <textarea id="result_fin" class="form-control ticket-textarea" rows="7" readonly></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
-                    <div class="d-flex gap-1">
-                        <button type="button" class="btn btn-sm btn-info text-white rounded-pill px-3" onclick="copiarResumenGeneral()"><i class="fa-solid fa-copy me-1"></i> Copiar Todo</button>
-                        <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" onclick="generarInformeFin()">Generar</button>
-                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_fin')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="confirmarLimpiarModal('fin', 'Fin del Día')"><i class="fa-solid fa-broom me-1"></i> Limpiar</button>
+                    <div>
+                        <button type="button" id="btn_generar_fin" class="btn btn-sm btn-danger rounded-pill px-3 me-1" onclick="generarInformeFin()">Generar</button>
+                        <button type="button" id="btn_copiar_fin" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_fin', 'fin')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN DE LIMPIAR SECCIÓN -->
+    <div class="modal fade" id="modalConfirmClear" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-3">
+                <div class="modal-body pt-4">
+                    <div class="clear-modal-icon">
+                        <i class="fa-solid fa-broom"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">¿Limpiar esta sección?</h5>
+                    <p class="text-muted small mb-0">Se borrarán todos los campos registrados en <strong id="clear_section_title">esta sección</strong>. Las demás secciones no se verán afectadas.</p>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning text-white rounded-pill px-4 fw-bold" onclick="ejecutarLimpiarModal()">Sí, limpiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE REINICIO DE TURNO (PERSONALIZADO) -->
+    <div class="modal fade" id="modalReset" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center p-3">
+                <div class="modal-body pt-4">
+                    <div class="reset-modal-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-2">¿Reiniciar Turno?</h5>
+                    <p class="text-muted small mb-0">Esta acción borrará todos los datos guardados del turno actual y comenzará un nuevo día. No se podrá deshacer.</p>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-3">
+                    <button type="button" class="btn btn-light rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" onclick="executeReset()">Sí, reiniciar</button>
                 </div>
             </div>
         </div>
@@ -771,24 +946,30 @@
 
     <!-- Toast de Notificación -->
     <div id="customToast" class="custom-toast">
-        <i class="fa-solid fa-circle-check text-success"></i>
+        <i id="toastIcon" class="fa-solid fa-circle-check text-success"></i>
         <span id="toastMessage">¡Copiado al portapapeles!</span>
     </div>
 
     <!-- JavaScript Bundle de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Estado y LocalStorage
+        let sectionToClear = null;
+
+        // Estado y LocalStorage con Timestamps Fijos
         let state = {
-            inicio: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '' },
+            puesto: 'Puesto 1',
+            inicio: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', timestamp: null },
             yapes: [],
+            yape_timestamp: null,
             needs: {
                 cucharas_chicas: '', cucharas_grandes: '', servilletas: '',
                 sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
                 carton_8: '', carton_12: '', carton_medio: '', carton_litro: '',
                 plastico_12: '', plastico_medio: '',
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
-                lejia: false, trapo: false, detergente: false, guantes: false
+                lejia: false, trapo: false, detergente: false, guantes: false,
+                generated: false,
+                timestamp: null
             },
             ingresos: {
                 cucharas_chicas: '', cucharas_grandes: '', servilletas: '',
@@ -796,14 +977,16 @@
                 carton_8: '', carton_12: '', carton_medio: '', carton_litro: '',
                 plastico_12: '', plastico_medio: '',
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
-                lejia: false, trapo: false, detergente: false, guantes: false
+                lejia: false, trapo: false, detergente: false, guantes: false,
+                generated: false,
+                timestamp: null
             },
-            gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '' },
-            fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '' }
+            gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', timestamp: null },
+            fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('ornela_arqueo_v11');
+            const saved = localStorage.getItem('ornela_arqueo_v16');
             if (saved) {
                 try { state = JSON.parse(saved); restoreFormValues(); } catch(e){}
             }
@@ -811,15 +994,36 @@
             setInterval(actualizarReloj, 1000);
             renderYapesList();
             toggleSueldoInput();
-            
+            checkFinLockState();
+            updateStatusBadges();
+
             const modalFinEl = document.getElementById('modalFin');
             if (modalFinEl) {
                 modalFinEl.addEventListener('show.bs.modal', () => {
+                    checkFinLockState();
                     const totalYape = state.yapes.reduce((acc, curr) => acc + curr, 0);
                     document.getElementById('fin_monto_yape').value = totalYape.toFixed(2);
                 });
             }
         });
+
+        function checkFinLockState() {
+            const isInicioDone = hasDataInicio();
+            const fields = document.querySelectorAll('.fin-field');
+            const notice = document.getElementById('fin_blocked_notice');
+
+            fields.forEach(el => {
+                el.disabled = !isInicioDone;
+            });
+
+            if (notice) {
+                if (!isInicioDone) {
+                    notice.classList.remove('d-none');
+                } else {
+                    notice.classList.add('d-none');
+                }
+            }
+        }
 
         function toggleSueldoInput() {
             const isChecked = document.getElementById('gasto_sueldo').checked;
@@ -830,8 +1034,25 @@
             }
         }
 
+        function updateStatusBadges() {
+            const bInicio = document.getElementById('badge_status_inicio');
+            const bYapes = document.getElementById('badge_status_yapes');
+            const bNeeds = document.getElementById('badge_status_needs');
+            const bIngresos = document.getElementById('badge_status_ingresos');
+            const bGastos = document.getElementById('badge_status_gastos');
+            const bFin = document.getElementById('badge_status_fin');
+
+            if (hasDataInicio()) bInicio.classList.remove('d-none'); else bInicio.classList.add('d-none');
+            if (hasDataYapes()) bYapes.classList.remove('d-none'); else bYapes.classList.add('d-none');
+            if (hasDataNeeds()) bNeeds.classList.remove('d-none'); else bNeeds.classList.add('d-none');
+            if (hasDataIngresos()) bIngresos.classList.remove('d-none'); else bIngresos.classList.add('d-none');
+            if (hasDataGastos()) bGastos.classList.remove('d-none'); else bGastos.classList.add('d-none');
+            if (hasDataFin()) bFin.classList.remove('d-none'); else bFin.classList.add('d-none');
+        }
+
         function saveState() {
-            // Inicio
+            state.puesto = document.getElementById('puesto_select').value;
+
             state.inicio.carton_8 = document.getElementById('init_carton_8').value;
             state.inicio.carton_12 = document.getElementById('init_carton_12').value;
             state.inicio.carton_medio = document.getElementById('init_carton_medio').value;
@@ -839,7 +1060,6 @@
             state.inicio.plastico_12 = document.getElementById('init_plastico_12').value;
             state.inicio.plastico_medio = document.getElementById('init_plastico_medio').value;
 
-            // Necesidades
             state.needs.cucharas_chicas = document.getElementById('need_cucharas_chicas').value;
             state.needs.cucharas_grandes = document.getElementById('need_cucharas_grandes').value;
             state.needs.servilletas = document.getElementById('need_servilletas').value;
@@ -861,7 +1081,6 @@
             state.needs.detergente = document.getElementById('clean_detergente').checked;
             state.needs.guantes = document.getElementById('clean_guantes').checked;
 
-            // Ingresos de Stock
             state.ingresos.cucharas_chicas = document.getElementById('ing_cucharas_chicas').value;
             state.ingresos.cucharas_grandes = document.getElementById('ing_cucharas_grandes').value;
             state.ingresos.servilletas = document.getElementById('ing_servilletas').value;
@@ -883,7 +1102,6 @@
             state.ingresos.detergente = document.getElementById('ing_clean_detergente').checked;
             state.ingresos.guantes = document.getElementById('ing_clean_guantes').checked;
 
-            // Gastos
             state.gastos.bebidas = document.getElementById('gasto_bebidas').checked;
             state.gastos.sueldo = document.getElementById('gasto_sueldo').checked;
             state.gastos.cochera = document.getElementById('gasto_cochera').checked;
@@ -891,7 +1109,6 @@
             state.gastos.sueldo_personas = document.getElementById('gasto_sueldo_personas').value;
             state.gastos.otros_detalle = document.getElementById('gasto_otros_detalle').value;
 
-            // Fin
             state.fin.carton_8 = document.getElementById('fin_carton_8').value;
             state.fin.carton_12 = document.getElementById('fin_carton_12').value;
             state.fin.carton_medio = document.getElementById('fin_carton_medio').value;
@@ -900,41 +1117,42 @@
             state.fin.plastico_medio = document.getElementById('fin_plastico_medio').value;
             state.fin.efectivo = document.getElementById('fin_monto_efectivo').value;
 
-            localStorage.setItem('ornela_arqueo_v11', JSON.stringify(state));
+            localStorage.setItem('ornela_arqueo_v16', JSON.stringify(state));
+            checkFinLockState();
+            updateStatusBadges();
         }
 
         function restoreFormValues() {
-            // Inicio
-            document.getElementById('init_carton_8').value = state.inicio.carton_8;
-            document.getElementById('init_carton_12').value = state.inicio.carton_12;
-            document.getElementById('init_carton_medio').value = state.inicio.carton_medio;
-            document.getElementById('init_carton_litro').value = state.inicio.carton_litro;
-            document.getElementById('init_plastico_12').value = state.inicio.plastico_12;
-            document.getElementById('init_plastico_medio').value = state.inicio.plastico_medio;
+            document.getElementById('puesto_select').value = state.puesto || 'Puesto 1';
 
-            // Necesidades
-            document.getElementById('need_cucharas_chicas').value = state.needs.cucharas_chicas;
-            document.getElementById('need_cucharas_grandes').value = state.needs.cucharas_grandes;
-            document.getElementById('need_servilletas').value = state.needs.servilletas;
-            document.getElementById('need_sorbetes').value = state.needs.sorbetes;
-            document.getElementById('need_bolsas_chicas').value = state.needs.bolsas_chicas;
-            document.getElementById('need_bolsas_medianas').value = state.needs.bolsas_medianas;
-            document.getElementById('need_carton_8').value = state.needs.carton_8;
-            document.getElementById('need_carton_12').value = state.needs.carton_12;
-            document.getElementById('need_carton_medio').value = state.needs.carton_medio;
-            document.getElementById('need_carton_litro').value = state.needs.carton_litro;
-            document.getElementById('need_plastico_12').value = state.needs.plastico_12;
-            document.getElementById('need_plastico_medio').value = state.needs.plastico_medio;
-            document.getElementById('need_tapas_8').value = state.needs.tapas_8;
-            document.getElementById('need_tapas_12').value = state.needs.tapas_12;
-            document.getElementById('need_tapas_medio').value = state.needs.tapas_medio;
-            document.getElementById('need_tapas_litro').value = state.needs.tapas_litro;
-            document.getElementById('clean_lejia').checked = state.needs.lejia;
-            document.getElementById('clean_trapo').checked = state.needs.trapo;
-            document.getElementById('clean_detergente').checked = state.needs.detergente;
-            document.getElementById('clean_guantes').checked = state.needs.guantes;
+            document.getElementById('init_carton_8').value = state.inicio.carton_8 || '';
+            document.getElementById('init_carton_12').value = state.inicio.carton_12 || '';
+            document.getElementById('init_carton_medio').value = state.inicio.carton_medio || '';
+            document.getElementById('init_carton_litro').value = state.inicio.carton_litro || '';
+            document.getElementById('init_plastico_12').value = state.inicio.plastico_12 || '';
+            document.getElementById('init_plastico_medio').value = state.inicio.plastico_medio || '';
 
-            // Ingresos
+            document.getElementById('need_cucharas_chicas').value = state.needs.cucharas_chicas || '';
+            document.getElementById('need_cucharas_grandes').value = state.needs.cucharas_grandes || '';
+            document.getElementById('need_servilletas').value = state.needs.servilletas || '';
+            document.getElementById('need_sorbetes').value = state.needs.sorbetes || '';
+            document.getElementById('need_bolsas_chicas').value = state.needs.bolsas_chicas || '';
+            document.getElementById('need_bolsas_medianas').value = state.needs.bolsas_medianas || '';
+            document.getElementById('need_carton_8').value = state.needs.carton_8 || '';
+            document.getElementById('need_carton_12').value = state.needs.carton_12 || '';
+            document.getElementById('need_carton_medio').value = state.needs.carton_medio || '';
+            document.getElementById('need_carton_litro').value = state.needs.carton_litro || '';
+            document.getElementById('need_plastico_12').value = state.needs.plastico_12 || '';
+            document.getElementById('need_plastico_medio').value = state.needs.plastico_medio || '';
+            document.getElementById('need_tapas_8').value = state.needs.tapas_8 || '';
+            document.getElementById('need_tapas_12').value = state.needs.tapas_12 || '';
+            document.getElementById('need_tapas_medio').value = state.needs.tapas_medio || '';
+            document.getElementById('need_tapas_litro').value = state.needs.tapas_litro || '';
+            document.getElementById('clean_lejia').checked = state.needs.lejia || false;
+            document.getElementById('clean_trapo').checked = state.needs.trapo || false;
+            document.getElementById('clean_detergente').checked = state.needs.detergente || false;
+            document.getElementById('clean_guantes').checked = state.needs.guantes || false;
+
             if (state.ingresos) {
                 document.getElementById('ing_cucharas_chicas').value = state.ingresos.cucharas_chicas || '';
                 document.getElementById('ing_cucharas_grandes').value = state.ingresos.cucharas_grandes || '';
@@ -958,7 +1176,6 @@
                 document.getElementById('ing_clean_guantes').checked = state.ingresos.guantes || false;
             }
 
-            // Gastos
             if (state.gastos) {
                 document.getElementById('gasto_bebidas').checked = state.gastos.bebidas || false;
                 document.getElementById('gasto_sueldo').checked = state.gastos.sueldo || false;
@@ -968,19 +1185,18 @@
                 document.getElementById('gasto_otros_detalle').value = state.gastos.otros_detalle || '';
             }
 
-            // Fin
-            document.getElementById('fin_carton_8').value = state.fin.carton_8;
-            document.getElementById('fin_carton_12').value = state.fin.carton_12;
-            document.getElementById('fin_carton_medio').value = state.fin.carton_medio;
-            document.getElementById('fin_carton_litro').value = state.fin.carton_litro;
-            document.getElementById('fin_plastico_12').value = state.fin.plastico_12;
-            document.getElementById('fin_plastico_medio').value = state.fin.plastico_medio;
-            document.getElementById('fin_monto_efectivo').value = state.fin.efectivo;
+            document.getElementById('fin_carton_8').value = state.fin.carton_8 || '';
+            document.getElementById('fin_carton_12').value = state.fin.carton_12 || '';
+            document.getElementById('fin_carton_medio').value = state.fin.carton_medio || '';
+            document.getElementById('fin_carton_litro').value = state.fin.carton_litro || '';
+            document.getElementById('fin_plastico_12').value = state.fin.plastico_12 || '';
+            document.getElementById('fin_plastico_medio').value = state.fin.plastico_medio || '';
+            document.getElementById('fin_monto_efectivo').value = state.fin.efectivo || '';
         }
 
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', saveState);
-            input.addEventListener('change', saveState);
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('input', saveState);
+            element.addEventListener('change', saveState);
         });
 
         function actualizarReloj() {
@@ -998,12 +1214,107 @@
             return new Date().toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
         }
 
-        // 1. Lógica Inicio
+        function getPuestoActual() {
+            return document.getElementById('puesto_select').value || 'Puesto 1';
+        }
+
+        // VALIDACIONES DE DATOS
+        function hasDataInicio() {
+            const i = state.inicio;
+            return !!(i.carton_8 || i.carton_12 || i.carton_medio || i.carton_litro || i.plastico_12 || i.plastico_medio);
+        }
+
+        function hasDataYapes() {
+            return state.yapes.length > 0;
+        }
+
+        function hasDataNeeds() {
+            const n = state.needs;
+            const tieneValores = !!(n.cucharas_chicas || n.cucharas_grandes || n.servilletas || n.sorbetes || n.bolsas_chicas || n.bolsas_medianas || n.carton_8 || n.carton_12 || n.carton_medio || n.carton_litro || n.plastico_12 || n.plastico_medio || n.tapas_8 || n.tapas_12 || n.tapas_medio || n.tapas_litro || n.lejia || n.trapo || n.detergente || n.guantes);
+            return tieneValores || !!n.generated;
+        }
+
+        function hasDataIngresos() {
+            const ing = state.ingresos;
+            const tieneValores = !!(ing.cucharas_chicas || ing.cucharas_grandes || ing.servilletas || ing.sorbetes || ing.bolsas_chicas || ing.bolsas_medianas || ing.carton_8 || ing.carton_12 || ing.carton_medio || ing.carton_litro || ing.plastico_12 || ing.plastico_medio || ing.tapas_8 || ing.tapas_12 || ing.tapas_medio || ing.tapas_litro || ing.lejia || ing.trapo || ing.detergente || ing.guantes);
+            return tieneValores || !!ing.generated;
+        }
+
+        function hasDataGastos() {
+            const g = state.gastos;
+            if (g.sueldo && (!g.sueldo_personas || parseInt(g.sueldo_personas) <= 0)) {
+                return false;
+            }
+            return !!(g.bebidas || g.sueldo || g.cochera || g.guarderia || (g.otros_detalle && g.otros_detalle.trim().length > 0));
+        }
+
+        function hasDataFin() {
+            const f = state.fin;
+            return !!(f.carton_8 || f.carton_12 || f.carton_medio || f.carton_litro || f.plastico_12 || f.plastico_medio || f.efectivo);
+        }
+
+        // CONFIRMACIÓN Y LIMPIEZA POR MODAL
+        function confirmarLimpiarModal(tipo, nombreSeccion) {
+            sectionToClear = tipo;
+            document.getElementById('clear_section_title').innerText = nombreSeccion;
+            const modalConfirm = new bootstrap.Modal(document.getElementById('modalConfirmClear'));
+            modalConfirm.show();
+        }
+
+        function ejecutarLimpiarModal() {
+            if (!sectionToClear) return;
+            const tipo = sectionToClear;
+
+            if (tipo === 'inicio') {
+                state.inicio = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', timestamp: null };
+                document.getElementById('result_inicio').value = '';
+            } else if (tipo === 'yape') {
+                state.yapes = [];
+                state.yape_timestamp = null;
+                document.getElementById('result_yape').value = '';
+            } else if (tipo === 'needs') {
+                state.needs = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null };
+                document.getElementById('result_needs').value = '';
+            } else if (tipo === 'ingresos') {
+                state.ingresos = { cucharas_chicas: '', cucharas_grandes: '', servilletas: '', sorbetes: '', bolsas_chicas: '', bolsas_medianas: '', carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '', lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null };
+                document.getElementById('result_ingresos').value = '';
+            } else if (tipo === 'gastos') {
+                state.gastos = { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', timestamp: null };
+                document.getElementById('result_gastos').value = '';
+            } else if (tipo === 'fin') {
+                state.fin = { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null };
+                document.getElementById('result_fin').value = '';
+            }
+
+            restoreFormValues();
+            saveState();
+            renderYapesList();
+            toggleSueldoInput();
+
+            const modalConfirmEl = document.getElementById('modalConfirmClear');
+            const modalInstance = bootstrap.Modal.getInstance(modalConfirmEl);
+            if (modalInstance) modalInstance.hide();
+
+            sectionToClear = null;
+            showToast("Sección limpiada correctamente");
+        }
+
+        // GENERADORES DE INFORMES
         function generarInformeInicio() {
             saveState();
+            if (!hasDataInicio()) {
+                showToast("No se puede generar el informe por falta de datos", true);
+                document.getElementById('result_inicio').value = "";
+                return "";
+            }
+            if (!state.inicio.timestamp) {
+                state.inicio.timestamp = getFechaHoraActual();
+                saveState();
+            }
             const i = state.inicio;
             const texto = `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.inicio.timestamp}
 ---------------------------------------------
 📦 Stock Inicial de Vasos:
 📄 CARTÓN:
@@ -1018,15 +1329,16 @@
 ---------------------------------------------
 Estado: Día iniciado correctamente.`;
             document.getElementById('result_inicio').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // 2. Lógica Yapes
         function agregarYape() {
             const input = document.getElementById('yape_input_monto');
             const val = parseFloat(input.value);
             if (isNaN(val) || val <= 0) return;
             state.yapes.push(val);
+            if (!state.yape_timestamp) state.yape_timestamp = getFechaHoraActual();
             input.value = '';
             saveState();
             renderYapesList();
@@ -1034,6 +1346,7 @@ Estado: Día iniciado correctamente.`;
 
         function eliminarYape(idx) {
             state.yapes.splice(idx, 1);
+            if (state.yapes.length === 0) state.yape_timestamp = null;
             saveState();
             renderYapesList();
         }
@@ -1054,6 +1367,7 @@ Estado: Día iniciado correctamente.`;
                 document.getElementById('yape_count_preview').innerText = "0";
                 document.getElementById('yape_total_preview').innerText = "S/ 0.00";
                 document.getElementById('result_yape').value = "";
+                updateStatusBadges();
                 return;
             }
 
@@ -1066,13 +1380,24 @@ Estado: Día iniciado correctamente.`;
             document.getElementById('yape_cadena_preview').innerText = state.yapes.join(' + ');
             document.getElementById('yape_count_preview').innerText = state.yapes.length;
             document.getElementById('yape_total_preview').innerText = `S/ ${total.toFixed(2)}`;
+            updateStatusBadges();
         }
 
         function generarInformeYapes() {
+            if (!hasDataYapes()) {
+                showToast("No se puede generar el informe por falta de datos", true);
+                document.getElementById('result_yape').value = "";
+                return "";
+            }
+            if (!state.yape_timestamp) {
+                state.yape_timestamp = getFechaHoraActual();
+                saveState();
+            }
             const total = state.yapes.reduce((a,b)=>a+b, 0);
             const desglose = state.yapes.length > 0 ? state.yapes.join(' + ') : '0';
             const texto = `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.yape_timestamp}
 ---------------------------------------------
 🔢 Desglose:
 ${desglose}
@@ -1082,12 +1407,18 @@ ${desglose}
 - 💵 MONTO TOTAL: S/ ${total.toFixed(2)}
 ---------------------------------------------`;
             document.getElementById('result_yape').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // 3. Lógica Necesidades
         function generarInformeNeeds() {
             saveState();
+            state.needs.generated = true;
+            if (!state.needs.timestamp) {
+                state.needs.timestamp = getFechaHoraActual();
+            }
+            saveState();
+
             const n = state.needs;
             let arr = [];
 
@@ -1118,7 +1449,8 @@ ${desglose}
             if (n.guantes) clean.push("Guantes");
 
             let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.needs.timestamp}
 ---------------------------------------------`;
             if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES:\n` + arr.join('\n');
             if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA:\n- ` + clean.join(', ');
@@ -1126,12 +1458,18 @@ ${desglose}
             texto += `\n---------------------------------------------`;
 
             document.getElementById('result_needs').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // 4. Lógica Ingresos de Stock
         function generarInformeIngresos() {
             saveState();
+            state.ingresos.generated = true;
+            if (!state.ingresos.timestamp) {
+                state.ingresos.timestamp = getFechaHoraActual();
+            }
+            saveState();
+
             const ing = state.ingresos;
             let arr = [];
 
@@ -1162,7 +1500,8 @@ ${desglose}
             if (ing.guantes) clean.push("Guantes");
 
             let texto = `📦 INFORME DE INGRESOS DE STOCK - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.ingresos.timestamp}
 ---------------------------------------------`;
             if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES INGRESADOS:\n` + arr.join('\n');
             if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA INGRESADA:\n- ` + clean.join(', ');
@@ -1170,13 +1509,30 @@ ${desglose}
             texto += `\n---------------------------------------------`;
 
             document.getElementById('result_ingresos').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // 5. Lógica Gastos del Día
         function generarInformeGastos() {
             saveState();
             const g = state.gastos;
+
+            if (g.sueldo && (!g.sueldo_personas || parseInt(g.sueldo_personas) <= 0)) {
+                showToast("Ingresa la cantidad de personas para Sueldo", true);
+                document.getElementById('result_gastos').value = "";
+                return "";
+            }
+
+            if (!hasDataGastos()) {
+                showToast("No se puede generar el informe por falta de datos", true);
+                document.getElementById('result_gastos').value = "";
+                return "";
+            }
+            if (!state.gastos.timestamp) {
+                state.gastos.timestamp = getFechaHoraActual();
+                saveState();
+            }
+            
             let arrGastos = [];
 
             if (g.bebidas) arrGastos.push("- Consumo de Bebidas");
@@ -1191,7 +1547,8 @@ ${desglose}
             }
 
             let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.gastos.timestamp}
 ---------------------------------------------`;
 
             if (arrGastos.length > 0) {
@@ -1202,17 +1559,31 @@ ${desglose}
             texto += `\n---------------------------------------------`;
 
             document.getElementById('result_gastos').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // 6. Lógica Fin (Cierre con suma de Ingresos de Stock)
         function generarInformeFin() {
             saveState();
+            if (!hasDataInicio()) {
+                showToast("Primero debes registrar el Inicio del Día", true);
+                document.getElementById('result_fin').value = "";
+                return "";
+            }
+            if (!hasDataFin()) {
+                showToast("No se puede generar el informe por falta de datos", true);
+                document.getElementById('result_fin').value = "";
+                return "";
+            }
+            if (!state.fin.timestamp) {
+                state.fin.timestamp = getFechaHoraActual();
+                saveState();
+            }
+
             const ini = state.inicio;
             const ing = state.ingresos;
             const fin = state.fin;
 
-            // FÓRMULA CORREGIDA: (Stock Inicial + Stock Ingresado) - Sobrantes
             const calcVentas = (i, ingreso, f) => {
                 const totalDisponible = (parseInt(i) || 0) + (parseInt(ingreso) || 0);
                 return Math.max(0, totalDisponible - (parseInt(f) || 0));
@@ -1222,7 +1593,8 @@ ${desglose}
             const montoEfectivo = parseFloat(fin.efectivo) || 0;
 
             const texto = `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora: ${state.fin.timestamp}
 ---------------------------------------------
 🥤 Vasos Vendidos / Sobrantes:
 📄 CARTÓN:
@@ -1242,28 +1614,223 @@ ${desglose}
 ---------------------------------------------`;
 
             document.getElementById('result_fin').value = texto;
+            updateStatusBadges();
             return texto;
         }
 
-        // Copiar Resumen General de Todos los Informes
+        // REPORTES RAW PARA CONSOLIDADO
+        function getRawInicio() {
+            if (!hasDataInicio()) return "";
+            const i = state.inicio;
+            return `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${i.timestamp || getFechaHoraActual()}
+---------------------------------------------
+📦 Stock Inicial de Vasos:
+📄 CARTÓN:
+- 8 oz: ${i.carton_8 || 0}
+- 12 oz: ${i.carton_12 || 0}
+- Medio Litro: ${i.carton_medio || 0}
+- Litro: ${i.carton_litro || 0}
+
+🥤 PLÁSTICO:
+- 12 oz: ${i.plastico_12 || 0}
+- Medio Litro: ${i.plastico_medio || 0}
+---------------------------------------------
+Estado: Día iniciado correctamente.`;
+        }
+
+        function getRawYapes() {
+            if (!hasDataYapes()) return "";
+            const total = state.yapes.reduce((a,b)=>a+b, 0);
+            const desglose = state.yapes.length > 0 ? state.yapes.join(' + ') : '0';
+            return `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${state.yape_timestamp || getFechaHoraActual()}
+---------------------------------------------
+🔢 Desglose:
+${desglose}
+
+📊 Resumen:
+- Total Yapes: ${state.yapes.length}
+- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}
+---------------------------------------------`;
+        }
+
+        function getRawNeeds() {
+            const n = state.needs;
+            let arr = [];
+
+            if (parseInt(n.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${n.cucharas_chicas} paq.`);
+            if (parseInt(n.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${n.cucharas_grandes} paq.`);
+            if (parseInt(n.servilletas) > 0) arr.push(`- Servilletas: ${n.servilletas} paq.`);
+            if (parseInt(n.sorbetes) > 0) arr.push(`- Sorbetes: ${n.sorbetes} paq.`);
+            if (parseInt(n.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${n.bolsas_chicas} paq.`);
+            if (parseInt(n.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${n.bolsas_medianas} paq.`);
+
+            if (parseInt(n.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${n.carton_8} paq.`);
+            if (parseInt(n.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${n.carton_12} paq.`);
+            if (parseInt(n.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${n.carton_medio} paq.`);
+            if (parseInt(n.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${n.carton_litro} paq.`);
+
+            if (parseInt(n.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${n.plastico_12} paq.`);
+            if (parseInt(n.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${n.plastico_medio} paq.`);
+
+            if (parseInt(n.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${n.tapas_8} paq.`);
+            if (parseInt(n.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${n.tapas_12} paq.`);
+            if (parseInt(n.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${n.tapas_medio} paq.`);
+            if (parseInt(n.tapas_litro) > 0) arr.push(`- Tapas Cartón 1L: ${n.tapas_litro} paq.`);
+
+            let clean = [];
+            if (n.lejia) clean.push("Lejía");
+            if (n.trapo) clean.push("Trapo");
+            if (n.detergente) clean.push("Detergente");
+            if (n.guantes) clean.push("Guantes");
+
+            let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${n.timestamp || getFechaHoraActual()}
+---------------------------------------------`;
+            if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES:\n` + arr.join('\n');
+            if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA:\n- ` + clean.join(', ');
+            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin faltantes registrados)`;
+            texto += `\n---------------------------------------------`;
+            return texto;
+        }
+
+        function getRawIngresos() {
+            const ing = state.ingresos;
+            let arr = [];
+
+            if (parseInt(ing.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${ing.cucharas_chicas} paq.`);
+            if (parseInt(ing.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${ing.cucharas_grandes} paq.`);
+            if (parseInt(ing.servilletas) > 0) arr.push(`- Servilletas: ${ing.servilletas} paq.`);
+            if (parseInt(ing.sorbetes) > 0) arr.push(`- Sorbetes: ${ing.sorbetes} paq.`);
+            if (parseInt(ing.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${ing.bolsas_chicas} paq.`);
+            if (parseInt(ing.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${ing.bolsas_medianas} paq.`);
+
+            if (parseInt(ing.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${ing.carton_8}`);
+            if (parseInt(ing.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${ing.carton_12}`);
+            if (parseInt(ing.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${ing.carton_medio}`);
+            if (parseInt(ing.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${ing.carton_litro}`);
+
+            if (parseInt(ing.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${ing.plastico_12}`);
+            if (parseInt(ing.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${ing.plastico_medio}`);
+
+            if (parseInt(ing.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${ing.tapas_8} paq.`);
+            if (parseInt(ing.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${ing.tapas_12} paq.`);
+            if (parseInt(ing.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${ing.tapas_medio} paq.`);
+            if (parseInt(ing.tapas_litro) > 0) arr.push(`- Tapas Cartón 1L: ${ing.tapas_litro} paq.`);
+
+            let clean = [];
+            if (ing.lejia) clean.push("Lejía");
+            if (ing.trapo) clean.push("Trapo");
+            if (ing.detergente) clean.push("Detergente");
+            if (ing.guantes) clean.push("Guantes");
+
+            let texto = `📦 INFORME DE INGRESOS DE STOCK - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${ing.timestamp || getFechaHoraActual()}
+---------------------------------------------`;
+            if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES INGRESADOS:\n` + arr.join('\n');
+            if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA INGRESADA:\n- ` + clean.join(', ');
+            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin ingresos registrados en el turno)`;
+            texto += `\n---------------------------------------------`;
+            return texto;
+        }
+
+        function getRawGastos() {
+            if (!hasDataGastos()) return "";
+            const g = state.gastos;
+            let arrGastos = [];
+
+            if (g.bebidas) arrGastos.push("- Consumo de Bebidas");
+            if (g.sueldo) {
+                let pers = g.sueldo_personas ? ` (${g.sueldo_personas} pers.)` : '';
+                arrGastos.push(`- Sueldo Personal${pers}`);
+            }
+            if (g.cochera) arrGastos.push("- Cochera");
+            if (g.guarderia) arrGastos.push("- Guardería");
+            if (g.otros_detalle && g.otros_detalle.trim().length > 0) {
+                arrGastos.push(`- Otros: ${g.otros_detalle.trim()}`);
+            }
+
+            let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${g.timestamp || getFechaHoraActual()}
+---------------------------------------------`;
+            if (arrGastos.length > 0) {
+                texto += `\n📋 GASTOS REGISTRADOS:\n` + arrGastos.join('\n');
+            } else {
+                texto += `\n(Sin gastos registrados en el turno)`;
+            }
+            texto += `\n---------------------------------------------`;
+            return texto;
+        }
+
+        function getRawFin() {
+            if (!hasDataFin()) return "";
+            const ini = state.inicio;
+            const ing = state.ingresos;
+            const fin = state.fin;
+
+            const calcVentas = (i, ingreso, f) => {
+                const totalDisponible = (parseInt(i) || 0) + (parseInt(ingreso) || 0);
+                return Math.max(0, totalDisponible - (parseInt(f) || 0));
+            };
+
+            const montoYape = state.yapes.reduce((a,b)=>a+b,0);
+            const montoEfectivo = parseFloat(fin.efectivo) || 0;
+
+            return `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${fin.timestamp || getFechaHoraActual()}
+---------------------------------------------
+🥤 Vasos Vendidos / Sobrantes:
+📄 CARTÓN:
+- 8 oz: ${calcVentas(ini.carton_8, ing.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})
+- 12 oz: ${calcVentas(ini.carton_12, ing.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})
+- Medio Litro: ${calcVentas(ini.carton_medio, ing.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})
+- Litro: ${calcVentas(ini.carton_litro, ing.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})
+
+🥤 PLÁSTICO:
+- 12 oz: ${calcVentas(ini.plastico_12, ing.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})
+- Medio Litro: ${calcVentas(ini.plastico_medio, ing.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})
+
+💰 Dinero:
+- Yape: S/ ${montoYape.toFixed(2)}
+- Efectivo: S/ ${montoEfectivo.toFixed(2)}
+- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}
+---------------------------------------------`;
+        }
+
+        // COPIAR RESUMEN GENERAL
         function copiarResumenGeneral() {
             saveState();
+
+            if (state.gastos.sueldo && (!state.gastos.sueldo_personas || parseInt(state.gastos.sueldo_personas) <= 0)) {
+                showToast("Ingresa la cantidad de personas para Sueldo en Gastos", true);
+                return;
+            }
+
+            const tieneAlgúnDato = hasDataInicio() || hasDataYapes() || hasDataGastos() || hasDataFin();
+
+            if (!tieneAlgúnDato) {
+                showToast("No se puede copiar el resumen por falta de datos", true);
+                return;
+            }
+
+            let bloques = [];
+            let iText = getRawInicio(); if (iText) bloques.push(iText);
+            let yText = getRawYapes(); if (yText) bloques.push(yText);
+            
+            bloques.push(getRawNeeds());
+            bloques.push(getRawIngresos());
+
+            let gText = getRawGastos(); if (gText) bloques.push(gText);
+            let fText = getRawFin(); if (fText) bloques.push(fText);
+
             const textoGeneral = `=============================================
 🌟 CONSOLIDADO GENERAL - ORNELA CREMOLADAS 🌟
-📅 Fecha y Hora: ${getFechaHoraActual()}
+📍 PUESTO: ${getPuestoActual()}
+📅 Fecha y Hora Generado: ${getFechaHoraActual()}
 =============================================
 
-` + generarInformeInicio() + `
-
-` + generarInformeYapes() + `
-
-` + generarInformeNeeds() + `
-
-` + generarInformeIngresos() + `
-
-` + generarInformeGastos() + `
-
-` + generarInformeFin() + `
+` + bloques.join('\n\n') + `
 
 =============================================
 ✅ Fin del Reporte Consolidado del Turno`;
@@ -1281,34 +1848,70 @@ ${desglose}
             });
         }
 
-        // Copiar individual de cada modal
-        function copiarInforme(elementId) {
+        // COPIAR INDIVIDUAL POR MODAL
+        function copiarInforme(elementId, tipo) {
+            let hasData = true;
+
+            if (tipo === 'inicio') hasData = hasDataInicio();
+            if (tipo === 'yape') hasData = hasDataYapes();
+            if (tipo === 'gastos') {
+                if (state.gastos.sueldo && (!state.gastos.sueldo_personas || parseInt(state.gastos.sueldo_personas) <= 0)) {
+                    showToast("Ingresa la cantidad de personas para Sueldo", true);
+                    return;
+                }
+                hasData = hasDataGastos();
+            }
+            if (tipo === 'fin') {
+                if (!hasDataInicio()) {
+                    showToast("Primero debes registrar el Inicio del Día", true);
+                    return;
+                }
+                hasData = hasDataFin();
+            }
+
+            if (!hasData) {
+                showToast("No se puede copiar el informe por falta de datos", true);
+                return;
+            }
+
             const txt = document.getElementById(elementId);
             if (!txt.value.trim()) {
-                if(elementId === 'result_inicio') generarInformeInicio();
-                if(elementId === 'result_yape') generarInformeYapes();
-                if(elementId === 'result_needs') generarInformeNeeds();
-                if(elementId === 'result_ingresos') generarInformeIngresos();
-                if(elementId === 'result_gastos') generarInformeGastos();
-                if(elementId === 'result_fin') generarInformeFin();
+                if(tipo === 'inicio') generarInformeInicio();
+                if(tipo === 'yape') generarInformeYapes();
+                if(tipo === 'needs') generarInformeNeeds();
+                if(tipo === 'ingresos') generarInformeIngresos();
+                if(tipo === 'gastos') generarInformeGastos();
+                if(tipo === 'fin') generarInformeFin();
             }
+
             const txtFinal = document.getElementById(elementId);
+            if (!txtFinal.value.trim() && tipo !== 'needs' && tipo !== 'ingresos') {
+                showToast("No se puede copiar el informe por falta de datos", true);
+                return;
+            }
+
             navigator.clipboard.writeText(txtFinal.value).then(() => showToast("¡Copiado al portapapeles!"))
             .catch(() => { txtFinal.select(); document.execCommand('copy'); showToast("¡Copiado!"); });
         }
 
-        function showToast(msg) {
+        function showToast(msg, isError = false) {
             const toast = document.getElementById('customToast');
+            const icon = document.getElementById('toastIcon');
+            
+            if (isError) {
+                icon.className = "fa-solid fa-triangle-exclamation text-warning";
+            } else {
+                icon.className = "fa-solid fa-circle-check text-success";
+            }
+
             document.getElementById('toastMessage').innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 2800);
         }
 
-        function confirmReset() {
-            if (confirm("¿Estás segura de reiniciar el turno y borrar todos los datos guardados?")) {
-                localStorage.removeItem('ornela_arqueo_v11');
-                location.reload();
-            }
+        function executeReset() {
+            localStorage.removeItem('ornela_arqueo_v16');
+            location.reload();
         }
     </script>
 </body>
