@@ -46,7 +46,7 @@
             padding: 0 1rem;
         }
 
-        /* Header Tipográfico */
+        /* Branding Superior */
         .brand-header {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -163,6 +163,7 @@
         .icon-inicio { background-color: #E6F4EA; color: #10B981; }
         .icon-yape { background-color: #F3E8FF; color: #9333EA; }
         .icon-needs { background-color: #FFF3E0; color: #F59E0B; }
+        .icon-gastos { background-color: #FEF3C7; color: #D97706; }
         .icon-fin { background-color: #FFE4E6; color: #E11D48; }
 
         .item-info {
@@ -279,6 +280,12 @@
             box-shadow: 0 0 0 3px rgba(255, 26, 131, 0.15);
         }
 
+        .form-control:disabled {
+            background-color: #F1F5F9;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .form-control[readonly] {
             background-color: #F8FAFC;
             cursor: not-allowed;
@@ -302,19 +309,21 @@
             background: #F8FAFC;
             border: 2px solid #E2E8F0;
             border-radius: 12px;
-            padding: 8px 12px;
-            margin-bottom: 6px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
+            width: 100%;
+            transition: all 0.2s;
         }
 
         .check-card:has(input:checked) {
-            background: #FFF0F6;
-            border-color: var(--brand-pink);
-            color: var(--brand-pink);
+            background: #FFFBEB;
+            border-color: #D97706;
+            color: #B45309;
         }
 
         .custom-toast {
@@ -344,7 +353,7 @@
 <body>
 
     <div class="app-wrapper">
-        <!-- Header con Nombre Tipográfico Grande -->
+        <!-- Header Tipográfico Grande -->
         <div class="brand-header">
             <h1 class="brand-title">Ornela Cremoladas</h1>
             <div class="brand-subtitle">CONTROL DIARIO DE CAJA</div>
@@ -387,6 +396,15 @@
                 <div class="item-info">
                     <p class="item-title">Necesidades / Faltantes</p>
                     <p class="item-desc">Pedir insumos y empaques</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
+
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalGastos">
+                <div class="icon-box icon-gastos"><i class="fa-solid fa-receipt"></i></div>
+                <div class="item-info">
+                    <p class="item-title">Gastos del día</p>
+                    <p class="item-desc">Bebidas, sueldo, cochera, etc.</p>
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
@@ -576,6 +594,57 @@
         </div>
     </div>
 
+    <!-- ================= MODAL GASTOS DEL DÍA ================= -->
+    <div class="modal fade" id="modalGastos" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold" style="color: #D97706 !important;"><i class="fa-solid fa-receipt me-2"></i>Gastos del Día</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="section-tag text-dark">Selección de Gastos</span>
+                    <div class="mb-3">
+                        <label class="check-card">
+                            <input type="checkbox" id="gasto_bebidas" class="form-check-input me-2"> 🥤 Consumo de Bebidas
+                        </label>
+                        <label class="check-card">
+                            <input type="checkbox" id="gasto_sueldo" class="form-check-input me-2" onchange="toggleSueldoInput()"> 👥 Sueldo Personal
+                        </label>
+                        <label class="check-card">
+                            <input type="checkbox" id="gasto_cochera" class="form-check-input me-2"> 🅿️ Cochera
+                        </label>
+                        <label class="check-card">
+                            <input type="checkbox" id="gasto_guarderia" class="form-check-input me-2"> 🦺 Guardería
+                        </label>
+                    </div>
+
+                    <div class="mb-3 ps-2" id="sueldo_personas_container">
+                        <label class="small text-muted fw-semibold">Cantidad de personas (Sueldo):</label>
+                        <input type="number" id="gasto_sueldo_personas" class="form-control mt-1" placeholder="Ej. 2" disabled>
+                    </div>
+
+                    <span class="section-tag text-dark">Otros Gastos (Detalle)</span>
+                    <div class="mb-3">
+                        <input type="text" id="gasto_otros_detalle" class="form-control" placeholder="Ej. Vaso de chicha, sombrilla, etc.">
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="small fw-bold text-dark">Informe de Gastos:</label>
+                        <textarea id="result_gastos" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #D97706;" onclick="generarInformeGastos()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_gastos')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= MODAL FIN DEL DÍA ================= -->
     <div class="modal fade" id="modalFin" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -600,7 +669,6 @@
                     </div>
 
                     <span class="section-tag text-success">Resumen de Dinero</span>
-                    <!-- Campo Yape bloqueado (readonly) -->
                     <div class="mb-2"><label class="small text-muted">Total Yape (S/)</label><input type="number" step="0.01" id="fin_monto_yape" class="form-control" placeholder="0.00" readonly></div>
                     <div class="mb-3"><label class="small text-muted">Total Efectivo (S/)</label><input type="number" step="0.01" id="fin_monto_efectivo" class="form-control" placeholder="0.00"></div>
 
@@ -641,17 +709,19 @@
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
                 lejia: false, trapo: false, detergente: false, guantes: false
             },
+            gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '' },
             fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '' }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            const saved = localStorage.getItem('ornela_arqueo_v3');
+            const saved = localStorage.getItem('ornela_arqueo_v7');
             if (saved) {
                 try { state = JSON.parse(saved); restoreFormValues(); } catch(e){}
             }
             actualizarReloj();
             setInterval(actualizarReloj, 1000);
             renderYapesList();
+            toggleSueldoInput();
             
             const modalFinEl = document.getElementById('modalFin');
             if (modalFinEl) {
@@ -661,6 +731,15 @@
                 });
             }
         });
+
+        function toggleSueldoInput() {
+            const isChecked = document.getElementById('gasto_sueldo').checked;
+            const inputPers = document.getElementById('gasto_sueldo_personas');
+            inputPers.disabled = !isChecked;
+            if (!isChecked) {
+                inputPers.value = '';
+            }
+        }
 
         function saveState() {
             state.inicio.carton_8 = document.getElementById('init_carton_8').value;
@@ -691,6 +770,13 @@
             state.needs.detergente = document.getElementById('clean_detergente').checked;
             state.needs.guantes = document.getElementById('clean_guantes').checked;
 
+            state.gastos.bebidas = document.getElementById('gasto_bebidas').checked;
+            state.gastos.sueldo = document.getElementById('gasto_sueldo').checked;
+            state.gastos.cochera = document.getElementById('gasto_cochera').checked;
+            state.gastos.guarderia = document.getElementById('gasto_guarderia').checked;
+            state.gastos.sueldo_personas = document.getElementById('gasto_sueldo_personas').value;
+            state.gastos.otros_detalle = document.getElementById('gasto_otros_detalle').value;
+
             state.fin.carton_8 = document.getElementById('fin_carton_8').value;
             state.fin.carton_12 = document.getElementById('fin_carton_12').value;
             state.fin.carton_medio = document.getElementById('fin_carton_medio').value;
@@ -699,7 +785,7 @@
             state.fin.plastico_medio = document.getElementById('fin_plastico_medio').value;
             state.fin.efectivo = document.getElementById('fin_monto_efectivo').value;
 
-            localStorage.setItem('ornela_arqueo_v3', JSON.stringify(state));
+            localStorage.setItem('ornela_arqueo_v7', JSON.stringify(state));
         }
 
         function restoreFormValues() {
@@ -730,6 +816,15 @@
             document.getElementById('clean_trapo').checked = state.needs.trapo;
             document.getElementById('clean_detergente').checked = state.needs.detergente;
             document.getElementById('clean_guantes').checked = state.needs.guantes;
+
+            if (state.gastos) {
+                document.getElementById('gasto_bebidas').checked = state.gastos.bebidas || false;
+                document.getElementById('gasto_sueldo').checked = state.gastos.sueldo || false;
+                document.getElementById('gasto_cochera').checked = state.gastos.cochera || false;
+                document.getElementById('gasto_guarderia').checked = state.gastos.guarderia || false;
+                document.getElementById('gasto_sueldo_personas').value = state.gastos.sueldo_personas || '';
+                document.getElementById('gasto_otros_detalle').value = state.gastos.otros_detalle || '';
+            }
 
             document.getElementById('fin_carton_8').value = state.fin.carton_8;
             document.getElementById('fin_carton_12').value = state.fin.carton_12;
@@ -804,11 +899,9 @@ Estado: Día iniciado correctamente.`;
             const container = document.getElementById('yapes_lista_container');
             const total = state.yapes.reduce((a,b)=>a+b, 0);
 
-            // Dashboard principal
             document.getElementById('dash_yape_count').innerText = state.yapes.length;
             document.getElementById('dash_yape_total').innerText = `S/ ${total.toFixed(2)}`;
             
-            // Actualizar campo del modal de Cierre
             const finYapeEl = document.getElementById('fin_monto_yape');
             if(finYapeEl) finYapeEl.value = total.toFixed(2);
 
@@ -893,6 +986,38 @@ ${state.yapes.join(' + ')}
             showToast("¡Informe de faltantes generado!");
         }
 
+        // Lógica Gastos del Día
+        function generarInformeGastos() {
+            saveState();
+            const g = state.gastos;
+            let arrGastos = [];
+
+            if (g.bebidas) arrGastos.push("- Consumo de Bebidas");
+            if (g.sueldo) {
+                let pers = g.sueldo_personas ? ` (${g.sueldo_personas} pers.)` : '';
+                arrGastos.push(`- Sueldo Personal${pers}`);
+            }
+            if (g.cochera) arrGastos.push("- Cochera");
+            if (g.guarderia) arrGastos.push("- Guardería");
+            if (g.otros_detalle && g.otros_detalle.trim().length > 0) {
+                arrGastos.push(`- Otros: ${g.otros_detalle.trim()}`);
+            }
+
+            let texto = `💸 INFORME DE GASTOS DEL DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${getFechaHoraActual()}
+---------------------------------------------`;
+
+            if (arrGastos.length > 0) {
+                texto += `\n📋 GASTOS REGISTRADOS:\n` + arrGastos.join('\n');
+            } else {
+                texto += `\n(Sin gastos registrados en el turno)`;
+            }
+            texto += `\n---------------------------------------------`;
+
+            document.getElementById('result_gastos').value = texto;
+            showToast("¡Informe de gastos generado!");
+        }
+
         // Lógica Fin (Cierre)
         function generarInformeFin() {
             saveState();
@@ -945,7 +1070,7 @@ ${state.yapes.join(' + ')}
 
         function confirmReset() {
             if (confirm("¿Estás segura de reiniciar el turno y borrar todos los datos guardados?")) {
-                localStorage.removeItem('ornela_arqueo_v3');
+                localStorage.removeItem('ornela_arqueo_v7');
                 location.reload();
             }
         }
