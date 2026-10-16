@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Diario de Caja - Ornela Cremoladas</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo/images.png">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-pastel-top: #8ED8F8;
+            --bg-pastel-bottom: #93E1F8;
+            --brand-pink: #FF1A83;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --card-main: #FFFFFF;
+            --item-bg: #F8FAFC;
+            --item-border: #F1F5F9;
+            --shadow-card: 0 20px 40px rgba(0, 120, 180, 0.12);
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-pastel-top) 0%, var(--bg-pastel-bottom) 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding: 3rem 0 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 0 1rem;
+        }
+
+        /* Header Tipográfico */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .brand-title {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: var(--brand-pink);
+            letter-spacing: -0.8px;
+            line-height: 1.1;
+            margin: 0;
+            text-shadow: 0 4px 12px rgba(255, 26, 131, 0.15);
+        }
+
+        .brand-subtitle {
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #1E3A5F;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+        }
+
+        /* Tarjeta Principal */
+        .main-card {
+            background: var(--card-main);
+            border-radius: 28px;
+            padding: 1.75rem 1.4rem 1.4rem 1.4rem;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .turn-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.4rem;
+        }
+
+        .turn-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0 0 0.3rem 0;
+        }
+
+        .badge-turn {
+            background-color: #DCFCE7;
+            color: #15803D;
+            font-weight: 700;
+            font-size: 0.72rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-turn-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #22C55E;
+            border-radius: 50%;
+        }
+
+        .clock-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #0F172A;
+        }
+
+        .clock-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Botones Módulos */
+        .action-item {
+            background-color: var(--item-bg);
+            border: 1px solid var(--item-border);
+            border-radius: 20px;
+            padding: 1rem 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 0.85rem;
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+            text-align: left;
+        }
+
+        .action-item:active {
+            transform: scale(0.98);
+            background-color: #F1F5F9;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .icon-inicio { background-color: #E6F4EA; color: #10B981; }
+        .icon-yape { background-color: #F3E8FF; color: #9333EA; }
+        .icon-needs { background-color: #FFF3E0; color: #F59E0B; }
+        .icon-fin { background-color: #FFE4E6; color: #E11D48; }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0F172A;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .item-desc {
+            font-size: 0.78rem;
+            color: #94A3B8;
+            margin: 0.15rem 0 0 0;
+            font-weight: 500;
+        }
+
+        .item-arrow {
+            color: #CBD5E1;
+            font-size: 0.85rem;
+        }
+
+        /* Resumen Inferior */
+        .summary-box {
+            border-top: 1px solid #F1F5F9;
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748B;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-value-count {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+        }
+
+        .summary-value-total {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #9333EA;
+            margin: 0;
+        }
+
+        .app-footer {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+
+        .footer-note {
+            font-size: 0.78rem;
+            color: #1E3A5F;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-reset-link {
+            background: none;
+            border: none;
+            color: #1E3A5F;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Modales */
+        .modal-content {
+            border-radius: 24px;
+            border: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #F1F5F9;
+            padding: 1.2rem 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #F1F5F9;
+            padding: 1rem 1.5rem;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 0.65rem 0.9rem;
+            border: 2px solid #E2E8F0;
+            font-weight: 600;
+        }
+
+        .form-control:focus {
+            border-color: var(--brand-pink);
+            box-shadow: 0 0 0 3px rgba(255, 26, 131, 0.15);
+        }
+
+        .form-control[readonly] {
+            background-color: #F8FAFC;
+            cursor: not-allowed;
+        }
+
+        .section-tag {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #F1F5F9;
+            color: #475569;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .check-card {
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .check-card:has(input:checked) {
+            background: #FFF0F6;
+            border-color: var(--brand-pink);
+            color: var(--brand-pink);
+        }
+
+        .custom-toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #0F172A;
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            font-weight: 600;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .custom-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- Header con Nombre Tipográfico Grande -->
+        <div class="brand-header">
+            <h1 class="brand-title">Ornela Cremoladas</h1>
+            <div class="brand-subtitle">CONTROL DIARIO DE CAJA</div>
+        </div>
+
+        <!-- Tarjeta Principal "Mi Turno" -->
+        <div class="main-card">
+            <div class="turn-header">
+                <div>
+                    <h2 class="turn-title">Mi turno</h2>
+                    <span class="badge-turn"><span class="badge-turn-dot"></span> Turno actual</span>
+                </div>
+                <div class="text-end">
+                    <div class="clock-date" id="live-date">-- ---. ----</div>
+                    <div class="clock-time" id="live-time">--:--:-- --</div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalInicio">
+                <div class="icon-box icon-inicio"><i class="fa-regular fa-sun"></i></div>
+                <div class="item-info">
+                    <p class="item-title">Inicio del día</p>
+                    <p class="item-desc">Registrar vasos iniciales</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
+
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalYape">
+                <div class="icon-box icon-yape"><i class="fa-solid fa-wallet"></i></div>
+                <div class="item-info">
+                    <p class="item-title">Yapes del día</p>
+                    <p class="item-desc">Registrar pagos recibidos</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
+
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalNeeds">
+                <div class="icon-box icon-needs"><i class="fa-solid fa-basket-shopping"></i></div>
+                <div class="item-info">
+                    <p class="item-title">Necesidades / Faltantes</p>
+                    <p class="item-desc">Pedir insumos y empaques</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
+
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalFin">
+                <div class="icon-box icon-fin"><i class="fa-solid fa-moon"></i></div>
+                <div class="item-info">
+                    <p class="item-title">Fin del día</p>
+                    <p class="item-desc">Registrar cierre de caja</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
+
+            <!-- Resumen Yape -->
+            <div class="summary-box">
+                <div>
+                    <div class="summary-label">Yapes registrados</div>
+                    <p class="summary-value-count" id="dash_yape_count">0</p>
+                </div>
+                <div>
+                    <div class="summary-label">Total por Yape</div>
+                    <p class="summary-value-total" id="dash_yape_total">S/ 0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="app-footer">
+            <div class="footer-note">
+                <i class="fa-solid fa-check text-success"></i> Guardado automático en este dispositivo
+            </div>
+            <button class="btn-reset-link" type="button" onclick="confirmReset()">
+                <i class="fa-solid fa-rotate-right"></i> Reiniciar día / Nuevo turno
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= MODAL INICIO DEL DÍA ================= -->
+    <div class="modal fade" id="modalInicio" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold text-success"><i class="fa-regular fa-sun me-2"></i>Inicio del Día</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="section-tag text-primary">Vasos de Cartón</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" id="init_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="init_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="init_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" id="init_carton_litro" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag text-info">Vasos de Plástico</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="init_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="init_plastico_medio" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="small fw-bold text-dark">Informe Generado:</label>
+                        <textarea id="result_inicio" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 me-1" onclick="generarInformeInicio()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_inicio')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL YAPES DEL DÍA ================= -->
+    <div class="modal fade" id="modalYape" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold" style="color: #9333EA;"><i class="fa-solid fa-wallet me-2"></i>Yapes del Día</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="small fw-bold text-dark mb-1">Ingresar Monto:</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text fw-bold">S/</span>
+                        <input type="number" step="0.01" id="yape_input_monto" class="form-control" placeholder="Ej. 10.00">
+                        <button class="btn btn-dark fw-bold px-3" type="button" onclick="agregarYape()"><i class="fa-solid fa-plus"></i> Agregar</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">Lista de Yapes:</label>
+                        <div id="yapes_lista_container" style="max-height: 120px; overflow-y: auto;" class="p-2 border rounded-3 bg-light">
+                            <span class="text-muted small fst-italic">No hay Yapes ingresados.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light rounded-3 mb-3 border">
+                        <div class="small text-muted fw-semibold">Cadena de suma:</div>
+                        <div id="yape_cadena_preview" class="font-monospace text-primary fw-bold" style="word-break: break-all;">0</div>
+                        <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+                            <span class="small">Cantidad: <strong id="yape_count_preview">0</strong></span>
+                            <span class="small text-success">Total: <strong id="yape_total_preview">S/ 0.00</strong></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="small fw-bold text-dark">Informe:</label>
+                        <textarea id="result_yape" class="form-control font-monospace bg-light" rows="5" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm text-white rounded-pill px-3 me-1" style="background: #9333EA;" onclick="generarInformeYapes()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_yape')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL NECESIDADES ================= -->
+    <div class="modal fade" id="modalNeeds" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold text-warning"><i class="fa-solid fa-basket-shopping me-2"></i>Necesidades / Faltantes</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="section-tag">1. Cubiertos y Servilletas (Paquetes)</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4"><label class="small text-muted">Cuchara Ch.</label><input type="number" id="need_cucharas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Cuchara Gr.</label><input type="number" id="need_cucharas_grandes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Servilletas</label><input type="number" id="need_servilletas" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag">2. Sorbetes y Bolsas (Paquetes)</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-4"><label class="small text-muted">Sorbetes</label><input type="number" id="need_sorbetes" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Ch.</label><input type="number" id="need_bolsas_chicas" class="form-control" placeholder="0"></div>
+                        <div class="col-4"><label class="small text-muted">Bolsa Med.</label><input type="number" id="need_bolsas_medianas" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag">3. Vasos (Paquetes)</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">Cartón 8oz</label><input type="number" id="need_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 12oz</label><input type="number" id="need_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1/2L</label><input type="number" id="need_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Cartón 1L</label><input type="number" id="need_carton_litro" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 12oz</label><input type="number" id="need_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Plástico 1/2L</label><input type="number" id="need_plastico_medio" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag">4. Tapas de Cartón (Paquetes)</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">Tapas 8oz</label><input type="number" id="need_tapas_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 12oz</label><input type="number" id="need_tapas_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1/2L</label><input type="number" id="need_tapas_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Tapas 1L</label><input type="number" id="need_tapas_litro" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag">5. Insumos de Limpieza</span>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_lejia" class="form-check-input me-2"> Lejía</label></div>
+                        <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_trapo" class="form-check-input me-2"> Trapo</label></div>
+                        <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_detergente" class="form-check-input me-2"> Detergente</label></div>
+                        <div class="col-6"><label class="check-card"><input type="checkbox" id="clean_guantes" class="form-check-input me-2"> Guantes</label></div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="small fw-bold text-dark">Informe de Faltantes:</label>
+                        <textarea id="result_needs" class="form-control font-monospace bg-light" rows="6" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-warning text-white rounded-pill px-3 me-1" onclick="generarInformeNeeds()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_needs')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL FIN DEL DÍA ================= -->
+    <div class="modal fade" id="modalFin" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold text-danger"><i class="fa-solid fa-moon me-2"></i>Fin del Día (Cierre)</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="section-tag text-primary">Sobrantes Cartón</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">8 oz</label><input type="number" id="fin_carton_8" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="fin_carton_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="fin_carton_medio" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Litro</label><input type="number" id="fin_carton_litro" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag text-info">Sobrantes Plástico</span>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="small text-muted">12 oz</label><input type="number" id="fin_plastico_12" class="form-control" placeholder="0"></div>
+                        <div class="col-6"><label class="small text-muted">Medio Litro</label><input type="number" id="fin_plastico_medio" class="form-control" placeholder="0"></div>
+                    </div>
+
+                    <span class="section-tag text-success">Resumen de Dinero</span>
+                    <!-- Campo Yape bloqueado (readonly) -->
+                    <div class="mb-2"><label class="small text-muted">Total Yape (S/)</label><input type="number" step="0.01" id="fin_monto_yape" class="form-control" placeholder="0.00" readonly></div>
+                    <div class="mb-3"><label class="small text-muted">Total Efectivo (S/)</label><input type="number" step="0.01" id="fin_monto_efectivo" class="form-control" placeholder="0.00"></div>
+
+                    <div class="mt-3">
+                        <label class="small fw-bold text-dark">Informe de Cierre:</label>
+                        <textarea id="result_fin" class="form-control font-monospace bg-light" rows="7" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-light rounded-pill px-3" data-bs-dismiss="modal">Cerrar</button>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-danger rounded-pill px-3 me-1" onclick="generarInformeFin()">Generar</button>
+                        <button type="button" class="btn btn-sm btn-dark rounded-pill px-3" onclick="copiarInforme('result_fin')"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Notificación -->
+    <div id="customToast" class="custom-toast">
+        <i class="fa-solid fa-circle-check text-success"></i>
+        <span id="toastMessage">¡Copiado al portapapeles!</span>
+    </div>
+
+    <!-- JavaScript Bundle de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Estado y LocalStorage
+        let state = {
+            inicio: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '' },
+            yapes: [],
+            needs: {
+                cucharas_chicas: '', cucharas_grandes: '', servilletas: '',
+                sorbetes: '', bolsas_chicas: '', bolsas_medianas: '',
+                carton_8: '', carton_12: '', carton_medio: '', carton_litro: '',
+                plastico_12: '', plastico_medio: '',
+                tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
+                lejia: false, trapo: false, detergente: false, guantes: false
+            },
+            fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '' }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('ornela_arqueo_v3');
+            if (saved) {
+                try { state = JSON.parse(saved); restoreFormValues(); } catch(e){}
+            }
+            actualizarReloj();
+            setInterval(actualizarReloj, 1000);
+            renderYapesList();
+            
+            const modalFinEl = document.getElementById('modalFin');
+            if (modalFinEl) {
+                modalFinEl.addEventListener('show.bs.modal', () => {
+                    const totalYape = state.yapes.reduce((acc, curr) => acc + curr, 0);
+                    document.getElementById('fin_monto_yape').value = totalYape.toFixed(2);
+                });
+            }
+        });
+
+        function saveState() {
+            state.inicio.carton_8 = document.getElementById('init_carton_8').value;
+            state.inicio.carton_12 = document.getElementById('init_carton_12').value;
+            state.inicio.carton_medio = document.getElementById('init_carton_medio').value;
+            state.inicio.carton_litro = document.getElementById('init_carton_litro').value;
+            state.inicio.plastico_12 = document.getElementById('init_plastico_12').value;
+            state.inicio.plastico_medio = document.getElementById('init_plastico_medio').value;
+
+            state.needs.cucharas_chicas = document.getElementById('need_cucharas_chicas').value;
+            state.needs.cucharas_grandes = document.getElementById('need_cucharas_grandes').value;
+            state.needs.servilletas = document.getElementById('need_servilletas').value;
+            state.needs.sorbetes = document.getElementById('need_sorbetes').value;
+            state.needs.bolsas_chicas = document.getElementById('need_bolsas_chicas').value;
+            state.needs.bolsas_medianas = document.getElementById('need_bolsas_medianas').value;
+            state.needs.carton_8 = document.getElementById('need_carton_8').value;
+            state.needs.carton_12 = document.getElementById('need_carton_12').value;
+            state.needs.carton_medio = document.getElementById('need_carton_medio').value;
+            state.needs.carton_litro = document.getElementById('need_carton_litro').value;
+            state.needs.plastico_12 = document.getElementById('need_plastico_12').value;
+            state.needs.plastico_medio = document.getElementById('need_plastico_medio').value;
+            state.needs.tapas_8 = document.getElementById('need_tapas_8').value;
+            state.needs.tapas_12 = document.getElementById('need_tapas_12').value;
+            state.needs.tapas_medio = document.getElementById('need_tapas_medio').value;
+            state.needs.tapas_litro = document.getElementById('need_tapas_litro').value;
+            state.needs.lejia = document.getElementById('clean_lejia').checked;
+            state.needs.trapo = document.getElementById('clean_trapo').checked;
+            state.needs.detergente = document.getElementById('clean_detergente').checked;
+            state.needs.guantes = document.getElementById('clean_guantes').checked;
+
+            state.fin.carton_8 = document.getElementById('fin_carton_8').value;
+            state.fin.carton_12 = document.getElementById('fin_carton_12').value;
+            state.fin.carton_medio = document.getElementById('fin_carton_medio').value;
+            state.fin.carton_litro = document.getElementById('fin_carton_litro').value;
+            state.fin.plastico_12 = document.getElementById('fin_plastico_12').value;
+            state.fin.plastico_medio = document.getElementById('fin_plastico_medio').value;
+            state.fin.efectivo = document.getElementById('fin_monto_efectivo').value;
+
+            localStorage.setItem('ornela_arqueo_v3', JSON.stringify(state));
+        }
+
+        function restoreFormValues() {
+            document.getElementById('init_carton_8').value = state.inicio.carton_8;
+            document.getElementById('init_carton_12').value = state.inicio.carton_12;
+            document.getElementById('init_carton_medio').value = state.inicio.carton_medio;
+            document.getElementById('init_carton_litro').value = state.inicio.carton_litro;
+            document.getElementById('init_plastico_12').value = state.inicio.plastico_12;
+            document.getElementById('init_plastico_medio').value = state.inicio.plastico_medio;
+
+            document.getElementById('need_cucharas_chicas').value = state.needs.cucharas_chicas;
+            document.getElementById('need_cucharas_grandes').value = state.needs.cucharas_grandes;
+            document.getElementById('need_servilletas').value = state.needs.servilletas;
+            document.getElementById('need_sorbetes').value = state.needs.sorbetes;
+            document.getElementById('need_bolsas_chicas').value = state.needs.bolsas_chicas;
+            document.getElementById('need_bolsas_medianas').value = state.needs.bolsas_medianas;
+            document.getElementById('need_carton_8').value = state.needs.carton_8;
+            document.getElementById('need_carton_12').value = state.needs.carton_12;
+            document.getElementById('need_carton_medio').value = state.needs.carton_medio;
+            document.getElementById('need_carton_litro').value = state.needs.carton_litro;
+            document.getElementById('need_plastico_12').value = state.needs.plastico_12;
+            document.getElementById('need_plastico_medio').value = state.needs.plastico_medio;
+            document.getElementById('need_tapas_8').value = state.needs.tapas_8;
+            document.getElementById('need_tapas_12').value = state.needs.tapas_12;
+            document.getElementById('need_tapas_medio').value = state.needs.tapas_medio;
+            document.getElementById('need_tapas_litro').value = state.needs.tapas_litro;
+            document.getElementById('clean_lejia').checked = state.needs.lejia;
+            document.getElementById('clean_trapo').checked = state.needs.trapo;
+            document.getElementById('clean_detergente').checked = state.needs.detergente;
+            document.getElementById('clean_guantes').checked = state.needs.guantes;
+
+            document.getElementById('fin_carton_8').value = state.fin.carton_8;
+            document.getElementById('fin_carton_12').value = state.fin.carton_12;
+            document.getElementById('fin_carton_medio').value = state.fin.carton_medio;
+            document.getElementById('fin_carton_litro').value = state.fin.carton_litro;
+            document.getElementById('fin_plastico_12').value = state.fin.plastico_12;
+            document.getElementById('fin_plastico_medio').value = state.fin.plastico_medio;
+            document.getElementById('fin_monto_efectivo').value = state.fin.efectivo;
+        }
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', saveState);
+            input.addEventListener('change', saveState);
+        });
+
+        function actualizarReloj() {
+            const now = new Date();
+            const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const dia = now.getDate();
+            const mes = meses[now.getMonth()];
+            const anio = now.getFullYear();
+            
+            document.getElementById('live-date').innerText = `${dia} ${mes}. ${anio}`;
+            document.getElementById('live-time').innerText = now.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        }
+
+        function getFechaHoraActual() {
+            return new Date().toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        // Lógica Inicio
+        function generarInformeInicio() {
+            saveState();
+            const i = state.inicio;
+            const texto = `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${getFechaHoraActual()}
+---------------------------------------------
+📦 Stock Inicial de Vasos:
+📄 CARTÓN:
+- 8 oz: ${i.carton_8 || 0}
+- 12 oz: ${i.carton_12 || 0}
+- Medio Litro: ${i.carton_medio || 0}
+- Litro: ${i.carton_litro || 0}
+
+🥤 PLÁSTICO:
+- 12 oz: ${i.plastico_12 || 0}
+- Medio Litro: ${i.plastico_medio || 0}
+---------------------------------------------
+Estado: Día iniciado correctamente.`;
+            document.getElementById('result_inicio').value = texto;
+            showToast("¡Informe generado con éxito!");
+        }
+
+        // Lógica Yapes
+        function agregarYape() {
+            const input = document.getElementById('yape_input_monto');
+            const val = parseFloat(input.value);
+            if (isNaN(val) || val <= 0) return;
+            state.yapes.push(val);
+            input.value = '';
+            saveState();
+            renderYapesList();
+        }
+
+        function eliminarYape(idx) {
+            state.yapes.splice(idx, 1);
+            saveState();
+            renderYapesList();
+        }
+
+        function renderYapesList() {
+            const container = document.getElementById('yapes_lista_container');
+            const total = state.yapes.reduce((a,b)=>a+b, 0);
+
+            // Dashboard principal
+            document.getElementById('dash_yape_count').innerText = state.yapes.length;
+            document.getElementById('dash_yape_total').innerText = `S/ ${total.toFixed(2)}`;
+            
+            // Actualizar campo del modal de Cierre
+            const finYapeEl = document.getElementById('fin_monto_yape');
+            if(finYapeEl) finYapeEl.value = total.toFixed(2);
+
+            if (state.yapes.length === 0) {
+                container.innerHTML = `<span class="text-muted small fst-italic">No hay Yapes ingresados.</span>`;
+                document.getElementById('yape_cadena_preview').innerText = "0";
+                document.getElementById('yape_count_preview').innerText = "0";
+                document.getElementById('yape_total_preview').innerText = "S/ 0.00";
+                document.getElementById('result_yape').value = "";
+                return;
+            }
+
+            let html = '';
+            state.yapes.forEach((m, idx) => {
+                html += `<div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom"><span class="small fw-semibold">#${idx + 1} - S/ ${m.toFixed(2)}</span><button class="btn btn-sm text-danger p-0" onclick="eliminarYape(${idx})"><i class="fa-solid fa-xmark"></i></button></div>`;
+            });
+            container.innerHTML = html;
+
+            document.getElementById('yape_cadena_preview').innerText = state.yapes.join(' + ');
+            document.getElementById('yape_count_preview').innerText = state.yapes.length;
+            document.getElementById('yape_total_preview').innerText = `S/ ${total.toFixed(2)}`;
+        }
+
+        function generarInformeYapes() {
+            if (state.yapes.length === 0) return;
+            const total = state.yapes.reduce((a,b)=>a+b, 0);
+            const texto = `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${getFechaHoraActual()}
+---------------------------------------------
+🔢 Desglose:
+${state.yapes.join(' + ')}
+
+📊 Resumen:
+- Total Yapes: ${state.yapes.length}
+- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}
+---------------------------------------------`;
+            document.getElementById('result_yape').value = texto;
+            showToast("¡Informe de Yapes generado!");
+        }
+
+        // Lógica Necesidades
+        function generarInformeNeeds() {
+            saveState();
+            const n = state.needs;
+            let arr = [];
+
+            if (parseInt(n.cucharas_chicas) > 0) arr.push(`- Cucharas chicas: ${n.cucharas_chicas} paq.`);
+            if (parseInt(n.cucharas_grandes) > 0) arr.push(`- Cucharas grandes: ${n.cucharas_grandes} paq.`);
+            if (parseInt(n.servilletas) > 0) arr.push(`- Servilletas: ${n.servilletas} paq.`);
+            if (parseInt(n.sorbetes) > 0) arr.push(`- Sorbetes: ${n.sorbetes} paq.`);
+            if (parseInt(n.bolsas_chicas) > 0) arr.push(`- Bolsas chicas: ${n.bolsas_chicas} paq.`);
+            if (parseInt(n.bolsas_medianas) > 0) arr.push(`- Bolsas medianas: ${n.bolsas_medianas} paq.`);
+
+            if (parseInt(n.carton_8) > 0) arr.push(`- Vasos Cartón 8oz: ${n.carton_8} paq.`);
+            if (parseInt(n.carton_12) > 0) arr.push(`- Vasos Cartón 12oz: ${n.carton_12} paq.`);
+            if (parseInt(n.carton_medio) > 0) arr.push(`- Vasos Cartón 1/2L: ${n.carton_medio} paq.`);
+            if (parseInt(n.carton_litro) > 0) arr.push(`- Vasos Cartón 1L: ${n.carton_litro} paq.`);
+
+            if (parseInt(n.plastico_12) > 0) arr.push(`- Vasos Plástico 12oz: ${n.plastico_12} paq.`);
+            if (parseInt(n.plastico_medio) > 0) arr.push(`- Vasos Plástico 1/2L: ${n.plastico_medio} paq.`);
+
+            if (parseInt(n.tapas_8) > 0) arr.push(`- Tapas Cartón 8oz: ${n.tapas_8} paq.`);
+            if (parseInt(n.tapas_12) > 0) arr.push(`- Tapas Cartón 12oz: ${n.tapas_12} paq.`);
+            if (parseInt(n.tapas_medio) > 0) arr.push(`- Tapas Cartón 1/2L: ${n.tapas_medio} paq.`);
+            if (parseInt(n.tapas_litro) > 0) arr.push(`- Tapas Cartón 1L: ${n.tapas_litro} paq.`);
+
+            let clean = [];
+            if (n.lejia) clean.push("Lejía");
+            if (n.trapo) clean.push("Trapo");
+            if (n.detergente) clean.push("Detergente");
+            if (n.guantes) clean.push("Guantes");
+
+            let texto = `🛒 INFORME DE NECESIDADES - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${getFechaHoraActual()}
+---------------------------------------------`;
+            if (arr.length > 0) texto += `\n📦 INSUMOS / EMPAQUES:\n` + arr.join('\n');
+            if (clean.length > 0) texto += `\n\n🧹 LIMPIEZA:\n- ` + clean.join(', ');
+            if (arr.length === 0 && clean.length === 0) texto += `\n(Sin faltantes registrados)`;
+            texto += `\n---------------------------------------------`;
+
+            document.getElementById('result_needs').value = texto;
+            showToast("¡Informe de faltantes generado!");
+        }
+
+        // Lógica Fin (Cierre)
+        function generarInformeFin() {
+            saveState();
+            const ini = state.inicio;
+            const fin = state.fin;
+
+            const calc = (i, f) => Math.max(0, (parseInt(i)||0) - (parseInt(f)||0));
+
+            const montoYape = state.yapes.reduce((a,b)=>a+b,0);
+            const montoEfectivo = parseFloat(fin.efectivo) || 0;
+
+            const texto = `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS
+📅 Fecha y Hora: ${getFechaHoraActual()}
+---------------------------------------------
+🥤 Vasos Vendidos / Sobrantes:
+📄 CARTÓN:
+- 8 oz: ${calc(ini.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})
+- 12 oz: ${calc(ini.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})
+- Medio Litro: ${calc(ini.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})
+- Litro: ${calc(ini.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})
+
+🥤 PLÁSTICO:
+- 12 oz: ${calc(ini.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})
+- Medio Litro: ${calc(ini.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})
+
+💰 Dinero:
+- Yape: S/ ${montoYape.toFixed(2)}
+- Efectivo: S/ ${montoEfectivo.toFixed(2)}
+- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}
+---------------------------------------------`;
+
+            document.getElementById('result_fin').value = texto;
+            showToast("¡Informe de cierre generado!");
+        }
+
+        // Copiar y Notificación
+        function copiarInforme(elementId) {
+            const txt = document.getElementById(elementId);
+            if (!txt.value.trim()) return;
+            navigator.clipboard.writeText(txt.value).then(() => showToast("¡Copiado al portapapeles!"))
+            .catch(() => { txt.select(); document.execCommand('copy'); showToast("¡Copiado!"); });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('customToast');
+            document.getElementById('toastMessage').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function confirmReset() {
+            if (confirm("¿Estás segura de reiniciar el turno y borrar todos los datos guardados?")) {
+                localStorage.removeItem('ornela_arqueo_v3');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
