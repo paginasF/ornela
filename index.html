@@ -700,7 +700,7 @@
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
 
-            <!-- Consolidado General -->
+            <!-- Consolidado General (Con validación de datos) -->
             <button class="action-item" type="button" onclick="abrirConsolidadoModal()">
                 <div class="icon-box icon-general"><i class="fa-solid fa-clipboard-list"></i></div>
                 <div class="item-info">
@@ -1432,6 +1432,11 @@
             return !!(f.carton_8 || f.carton_12 || f.carton_medio || f.carton_litro || f.plastico_12 || f.plastico_medio || f.efectivo);
         }
 
+        /* VERIFICAR SI HAY AL MENOS UN DATO REGISTRADO EN GENERAL */
+        function hasAnyDataRegistered() {
+            return hasDataInicio() || hasDataYapes() || hasDataNeeds() || hasDataIngresos() || hasDataGastos() || hasDataFin();
+        }
+
         function confirmarLimpiarModal(tipo, nombreSeccion) {
             sectionToClear = tipo;
             document.getElementById('clear_section_title').innerText = nombreSeccion;
@@ -1814,6 +1819,12 @@
         }
 
         function abrirConsolidadoModal() {
+            // Validación: Si no hay ningún dato registrado en absoluto, mostrar advertencia y bloquear
+            if (!hasAnyDataRegistered()) {
+                showToast("¡Primero debes rellenar al menos un dato antes de ver el consolidado!", true);
+                return;
+            }
+
             const textoGeneral = getRawConsolidadoText();
             document.getElementById('result_consolidado').value = textoGeneral;
             new bootstrap.Modal(document.getElementById('modalConsolidado')).show();
