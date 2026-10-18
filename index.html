@@ -202,7 +202,7 @@
             font-weight: 500;
         }
 
-        /* DISEÑO MEJORADO PARA EL SELECTOR DE PUESTO Y SU MENÚ FLOTANTE */
+        /* SELECTOR DE PUESTO PERSONALIZADO */
         .puesto-selector-container {
             background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
             border: 2px solid #BAE6FD;
@@ -230,7 +230,6 @@
             gap: 8px;
         }
 
-        /* Botón personalizado del Puesto (Dropdown) */
         .custom-puesto-dropdown {
             position: relative;
         }
@@ -257,7 +256,6 @@
             box-shadow: 0 0 0 4px rgba(255, 26, 131, 0.15);
         }
 
-        /* Menú desplegable personalizado con diseño hermoso */
         .puesto-dropdown-menu {
             position: absolute;
             top: calc(100% + 8px);
@@ -606,7 +604,7 @@
                 </div>
             </div>
 
-            <!-- SELECTOR DE PUESTO PERSONALIZADO CON DISEÑO HERMOSO -->
+            <!-- SELECTOR DE PUESTO PERSONALIZADO -->
             <div class="puesto-selector-container">
                 <div class="puesto-label">
                     <i class="fa-solid fa-store"></i> Seleccionar Puesto:
@@ -1469,7 +1467,7 @@
             }
         }
 
-        /* INFORMES INDIVIDUALES CON SCROLL AUTOMÁTICO */
+        /* INFORMES INDIVIDUALES */
         function generarInformeInicio() {
             saveState();
             if (!hasDataInicio()) { showToast("Faltan datos en Inicio", true); document.getElementById('result_inicio').value = ""; return ""; }
@@ -1683,52 +1681,140 @@
             return texto;
         }
 
-        /* CONSOLIDADO GENERAL */
+        /* CONSOLIDADO GENERAL CORTO Y COMPACTO */
         function getRawConsolidadoText() {
             saveState();
-            let bloques = [];
 
-            const removerPuesto = (texto) => {
-                if (!texto) return "";
-                return texto.replace(/\n📍 PUESTO:.*(?=\n)/, "");
-            };
+            let txt = `=============================================\n🌟 RESUMEN DE TURNO - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha: ${getFechaHoraActual()}\n=============================================\n\n`;
 
+            // 1. INICIO
+            const ini = state.inicio;
+            txt += `☀️ INICIO:\n`;
             if (hasDataInicio()) {
-                let txt = document.getElementById('result_inicio').value || generarInformeInicio();
-                bloques.push(removerPuesto(txt));
+                txt += `- Cartón: 8oz [${ini.carton_8||0}], 12oz [${ini.carton_12||0}], 1/2L [${ini.carton_medio||0}], 1L [${ini.carton_litro||0}]\n`;
+                txt += `- Plástico: 12oz [${ini.plastico_12||0}], 1/2L [${ini.plastico_medio||0}]\n\n`;
+            } else {
+                txt += `- (Sin registrar)\n\n`;
             }
+
+            // 2. YAPES
+            txt += `📱 YAPES:\n`;
             if (hasDataYapes()) {
-                let txt = document.getElementById('result_yape').value || generarInformeYapes();
-                bloques.push(removerPuesto(txt));
+                const totalYape = state.yapes.reduce((a,b)=>a+b, 0);
+                txt += `- Total: ${state.yapes.length} Yapes | Monto: S/ ${totalYape.toFixed(2)}\n`;
+                txt += `- Desglose: ${state.yapes.join(' + ')}\n\n`;
+            } else {
+                txt += `- Total: 0 Yapes | Monto: S/ 0.00\n\n`;
             }
-            if (state.needs && state.needs.generated) {
-                let txt = document.getElementById('result_needs').value || getRawNeedsText();
-                bloques.push(removerPuesto(txt));
+
+            // 3. NECESIDADES
+            const n = state.needs;
+            txt += `🛒 NECESIDADES / FALTANTES:\n`;
+            let arrNeeds = [];
+            if (parseInt(n.cucharas_chicas) > 0) arrNeeds.push(`Cucharas chicas: ${n.cucharas_chicas} paq.`);
+            if (parseInt(n.cucharas_grandes) > 0) arrNeeds.push(`Cucharas grandes: ${n.cucharas_grandes} paq.`);
+            if (parseInt(n.servilletas) > 0) arrNeeds.push(`Servilletas: ${n.servilletas} paq.`);
+            if (parseInt(n.sorbetes) > 0) arrNeeds.push(`Sorbetes: ${n.sorbetes} paq.`);
+            if (parseInt(n.bolsas_chicas) > 0) arrNeeds.push(`Bolsas chicas: ${n.bolsas_chicas} paq.`);
+            if (parseInt(n.bolsas_medianas) > 0) arrNeeds.push(`Bolsas medianas: ${n.bolsas_medianas} paq.`);
+            if (parseInt(n.carton_8) > 0) arrNeeds.push(`Vasos Cartón 8oz: ${n.carton_8} paq.`);
+            if (parseInt(n.carton_12) > 0) arrNeeds.push(`Vasos Cartón 12oz: ${n.carton_12} paq.`);
+            if (parseInt(n.carton_medio) > 0) arrNeeds.push(`Vasos Cartón 1/2L: ${n.carton_medio} paq.`);
+            if (parseInt(n.carton_litro) > 0) arrNeeds.push(`Vasos Cartón 1L: ${n.carton_litro} paq.`);
+            if (parseInt(n.plastico_12) > 0) arrNeeds.push(`Vasos Plástico 12oz: ${n.plastico_12} paq.`);
+            if (parseInt(n.plastico_medio) > 0) arrNeeds.push(`Vasos Plástico 1/2L: ${n.plastico_medio} paq.`);
+            if (parseInt(n.tapas_8) > 0) arrNeeds.push(`Tapas Cartón 8oz: ${n.tapas_8} paq.`);
+            if (parseInt(n.tapas_12) > 0) arrNeeds.push(`Tapas Cartón 12oz: ${n.tapas_12} paq.`);
+            if (parseInt(n.tapas_medio) > 0) arrNeeds.push(`Tapas Cartón 1/2L: ${n.tapas_medio} paq.`);
+            if (parseInt(n.tapas_litro) > 0) arrNeeds.push(`Tapas Cartón 1L: ${n.tapas_litro} paq.`);
+            
+            let cleanNeeds = [];
+            if (n.lejia) cleanNeeds.push("Lejía");
+            if (n.trapo) cleanNeeds.push("Trapo");
+            if (n.detergente) cleanNeeds.push("Detergente");
+            if (n.guantes) cleanNeeds.push("Guantes");
+
+            if (arrNeeds.length > 0 || cleanNeeds.length > 0) {
+                arrNeeds.forEach(item => { txt += `- ${item}\n`; });
+                if (cleanNeeds.length > 0) txt += `- Limpieza: ${cleanNeeds.join(', ')}\n`;
+                txt += `\n`;
+            } else {
+                txt += `- (Sin faltantes registrados)\n\n`;
             }
-            if (state.ingresos && state.ingresos.generated) {
-                let txt = document.getElementById('result_ingresos').value || getRawIngresosText();
-                bloques.push(removerPuesto(txt));
+
+            // 4. INGRESOS
+            const ing = state.ingresos;
+            txt += `📦 INGRESOS DE STOCK:\n`;
+            let arrIng = [];
+            if (parseInt(ing.cucharas_chicas) > 0) arrIng.push(`Cucharas chicas: ${ing.cucharas_chicas} paq.`);
+            if (parseInt(ing.cucharas_grandes) > 0) arrIng.push(`Cucharas grandes: ${ing.cucharas_grandes} paq.`);
+            if (parseInt(ing.servilletas) > 0) arrIng.push(`Servilletas: ${ing.servilletas} paq.`);
+            if (parseInt(ing.sorbetes) > 0) arrIng.push(`Sorbetes: ${ing.sorbetes} paq.`);
+            if (parseInt(ing.bolsas_chicas) > 0) arrIng.push(`Bolsas chicas: ${ing.bolsas_chicas} paq.`);
+            if (parseInt(ing.bolsas_medianas) > 0) arrIng.push(`Bolsas medianas: ${ing.bolsas_medianas} paq.`);
+            if (parseInt(ing.carton_8) > 0) arrIng.push(`Vasos Cartón 8oz: ${ing.carton_8}`);
+            if (parseInt(ing.carton_12) > 0) arrIng.push(`Vasos Cartón 12oz: ${ing.carton_12}`);
+            if (parseInt(ing.carton_medio) > 0) arrIng.push(`Vasos Cartón 1/2L: ${ing.carton_medio}`);
+            if (parseInt(ing.carton_litro) > 0) arrIng.push(`Vasos Cartón 1L: ${ing.carton_litro}`);
+            if (parseInt(ing.plastico_12) > 0) arrIng.push(`Vasos Plástico 12oz: ${ing.plastico_12}`);
+            if (parseInt(ing.plastico_medio) > 0) arrIng.push(`Vasos Plástico 1/2L: ${ing.plastico_medio}`);
+            if (parseInt(ing.tapas_8) > 0) arrIng.push(`Tapas Cartón 8oz: ${ing.tapas_8} paq.`);
+            if (parseInt(ing.tapas_12) > 0) arrIng.push(`Tapas Cartón 12oz: ${ing.tapas_12} paq.`);
+            if (parseInt(ing.tapas_medio) > 0) arrIng.push(`Tapas Cartón 1/2L: ${ing.tapas_medio} paq.`);
+            if (parseInt(ing.tapas_litro) > 0) arrIng.push(`Tapas Cartón 1L: ${ing.tapas_litro} paq.`);
+
+            let cleanIng = [];
+            if (ing.lejia) cleanIng.push("Lejía");
+            if (ing.trapo) cleanIng.push("Trapo");
+            if (ing.detergente) cleanIng.push("Detergente");
+            if (ing.guantes) cleanIng.push("Guantes");
+
+            if (arrIng.length > 0 || cleanIng.length > 0) {
+                arrIng.forEach(item => { txt += `- ${item}\n`; });
+                if (cleanIng.length > 0) txt += `- Limpieza: ${cleanIng.join(', ')}\n`;
+                txt += `\n`;
+            } else {
+                txt += `- (Sin ingresos registrados)\n\n`;
             }
-            if (state.gastos && state.gastos.generated) {
-                let txt = document.getElementById('result_gastos').value || generarInformeGastos();
-                bloques.push(removerPuesto(txt));
+
+            // 5. GASTOS
+            const g = state.gastos;
+            txt += `💸 GASTOS:\n`;
+            let arrGastos = [];
+            if (g.bebidas) arrGastos.push("Consumo de Bebidas");
+            if (g.sueldo) arrGastos.push(`Sueldo Personal (${g.sueldo_personas||0} pers.)`);
+            if (g.cochera) arrGastos.push("Cochera");
+            if (g.guarderia) arrGastos.push("Guardería");
+            if (g.otros_detalle && g.otros_detalle.trim().length > 0) arrGastos.push(`Otros: ${g.otros_detalle.trim()}`);
+
+            if (arrGastos.length > 0) {
+                arrGastos.forEach(item => { txt += `- ${item}\n`; });
+                txt += `\n`;
+            } else {
+                txt += `- (Sin gastos registrados)\n\n`;
             }
+
+            // 6. CIERRE Y SOBRANTES
+            const fin = state.fin;
+            const totalYape = state.yapes.reduce((a,b)=>a+b, 0);
+            const montoEfectivo = parseFloat(fin.efectivo) || 0;
+
+            txt += `🌙 CIERRE & SOBRANTES:\n`;
             if (hasDataFin()) {
-                let txt = document.getElementById('result_fin').value || generarInformeFin();
-                bloques.push(removerPuesto(txt));
+                txt += `- Sobrantes Cartón: 8oz [${fin.carton_8||0}], 12oz [${fin.carton_12||0}], 1/2L [${fin.carton_medio||0}], 1L [${fin.carton_litro||0}]\n`;
+                txt += `- Sobrantes Plástico: 12oz [${fin.plastico_12||0}], 1/2L [${fin.plastico_medio||0}]\n`;
+            } else {
+                txt += `- Sobrantes: (Cierre no registrado aún)\n`;
             }
+            txt += `- Yape: S/ ${totalYape.toFixed(2)} | Efectivo: S/ ${montoEfectivo.toFixed(2)}\n`;
+            txt += `- 💵 TOTAL GENERAL: S/ ${(totalYape + montoEfectivo).toFixed(2)}\n`;
+            txt += `=============================================`;
 
-            if (bloques.length === 0) return "";
-
-            return `=============================================\n🌟 CONSOLIDADO GENERAL - ORNELA CREMOLADAS 🌟\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${getFechaHoraActual()}\n=============================================\n\n` + bloques.join('\n\n') + `\n\n=============================================\n✅ Fin del Reporte Consolidado del Turno`;
+            return txt;
         }
 
         function abrirConsolidadoModal() {
             const textoGeneral = getRawConsolidadoText();
-            if (!textoGeneral) {
-                showToast("Aún no hay informes generados para consolidar", true);
-                return;
-            }
             document.getElementById('result_consolidado').value = textoGeneral;
             new bootstrap.Modal(document.getElementById('modalConsolidado')).show();
         }
@@ -1745,12 +1831,7 @@
         function copiarInforme(elementId, tipo) {
             const txtFinal = document.getElementById(elementId);
             if (tipo === 'consolidado') {
-                const generado = getRawConsolidadoText();
-                if (!generado) {
-                    showToast("Aún no hay datos para consolidar. Genera algún informe primero.", true);
-                    return;
-                }
-                txtFinal.value = generado;
+                txtFinal.value = getRawConsolidadoText();
             }
             if (!txtFinal.value.trim()) {
                 showToast("Aún no hay datos para copiar", true);
