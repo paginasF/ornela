@@ -202,40 +202,109 @@
             font-weight: 500;
         }
 
+        /* DISEÑO MEJORADO PARA EL SELECTOR DE PUESTO Y SU MENÚ FLOTANTE */
         .puesto-selector-container {
-            background-color: #F8FAFC;
-            border: 2px solid #E2E8F0;
-            border-radius: 18px;
-            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border: 2px solid #BAE6FD;
+            border-radius: 20px;
+            padding: 0.9rem 1.2rem;
             margin-bottom: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .puesto-selector-container:hover {
+            border-color: var(--brand-pink);
+            box-shadow: 0 10px 25px rgba(255, 26, 131, 0.12);
         }
 
         .puesto-label {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 800;
-            color: #1E293B;
+            color: #0369A1;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .puesto-select {
-            border: 2px solid #CBD5E1;
-            border-radius: 12px;
-            padding: 0.35rem 0.8rem;
+        /* Botón personalizado del Puesto (Dropdown) */
+        .custom-puesto-dropdown {
+            position: relative;
+        }
+
+        .puesto-btn-toggle {
+            border: 2px solid #7DD3FC;
+            border-radius: 14px;
+            padding: 0.45rem 1rem;
             font-weight: 800;
-            font-size: 0.88rem;
+            font-size: 0.92rem;
             color: #0F172A;
             background-color: #FFFFFF;
             cursor: pointer;
             outline: none;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .puesto-select:focus {
+        .puesto-btn-toggle:hover, .puesto-btn-toggle:focus {
             border-color: var(--brand-pink);
+            box-shadow: 0 0 0 4px rgba(255, 26, 131, 0.15);
+        }
+
+        /* Menú desplegable personalizado con diseño hermoso */
+        .puesto-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 140px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border: 2px solid #E2E8F0;
+            padding: 6px;
+            z-index: 1050;
+            display: none;
+            animation: fadeInDropdown 0.2s ease;
+        }
+
+        .puesto-dropdown-menu.show {
+            display: block;
+        }
+
+        @keyframes fadeInDropdown {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .puesto-dropdown-item {
+            padding: 9px 14px;
+            font-weight: 800;
+            font-size: 0.88rem;
+            color: #1E293B;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .puesto-dropdown-item:hover {
+            background-color: #F1F5F9;
+            color: var(--brand-pink);
+        }
+
+        .puesto-dropdown-item.active {
+            background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
         }
 
         .action-item {
@@ -537,15 +606,27 @@
                 </div>
             </div>
 
-            <!-- SELECTOR DE PUESTO -->
+            <!-- SELECTOR DE PUESTO PERSONALIZADO CON DISEÑO HERMOSO -->
             <div class="puesto-selector-container">
                 <div class="puesto-label">
-                    <i class="fa-solid fa-store text-primary"></i> Seleccionar Puesto:
+                    <i class="fa-solid fa-store"></i> Seleccionar Puesto:
                 </div>
-                <select id="puesto_select" class="puesto-select" onchange="saveState()">
-                    <option value="Puesto 1">Puesto 1</option>
-                    <option value="Puesto 2">Puesto 2</option>
-                </select>
+                <div class="custom-puesto-dropdown">
+                    <button type="button" class="puesto-btn-toggle" id="puestoDropdownToggle" onclick="togglePuestoDropdown()">
+                        <span id="puesto_selected_text">Puesto 1</span>
+                        <i class="fa-solid fa-chevron-down small text-muted"></i>
+                    </button>
+                    <div class="puesto-dropdown-menu" id="puestoDropdownMenu">
+                        <div class="puesto-dropdown-item active" onclick="seleccionarPuesto('Puesto 1')">
+                            <span>Puesto 1</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </div>
+                        <div class="puesto-dropdown-item" onclick="seleccionarPuesto('Puesto 2')">
+                            <span>Puesto 2</span>
+                            <i class="fa-solid fa-check check-icon d-none"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Botones de Acción -->
@@ -1029,7 +1110,7 @@
                 tapas_8: '', tapas_12: '', tapas_medio: '', tapas_litro: '',
                 lejia: false, trapo: false, detergente: false, guantes: false, generated: false, timestamp: null
             },
-            gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', otros_detalle: '', generated: false, timestamp: null },
+            gastos: { bebidas: false, sueldo: false, cochera: false, guarderia: false, sueldo_personas: '', outros_detalle: '', generated: false, timestamp: null },
             fin: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_12: '', plastico_medio: '', efectivo: '', timestamp: null }
         };
 
@@ -1046,7 +1127,11 @@
 
             const saved = localStorage.getItem('ornela_arqueo_v17');
             if (saved) {
-                try { state = JSON.parse(saved); restoreFormValues(); } catch(e){}
+                try { 
+                    state = JSON.parse(saved); 
+                    if(state.puesto) actualizarUISeleccionPuesto(state.puesto);
+                    restoreFormValues(); 
+                } catch(e){}
             }
             actualizarReloj();
             setInterval(actualizarReloj, 1000);
@@ -1055,15 +1140,68 @@
             checkFinLockState();
             updateStatusBadges();
 
+            // Cerrar menú de puesto al hacer clic fuera
+            window.addEventListener('click', (e) => {
+                const container = document.querySelector('.custom-puesto-dropdown');
+                const menu = document.getElementById('puestoDropdownMenu');
+                if (container && !container.contains(e.target)) {
+                    menu.classList.remove('show');
+                }
+            });
+
+            const modalInicioEl = document.getElementById('modalInicio');
+            if (modalInicioEl) modalInicioEl.addEventListener('show.bs.modal', () => { if(hasDataInicio()) generarInformeInicio(); });
+
+            const modalYapeEl = document.getElementById('modalYape');
+            if (modalYapeEl) modalYapeEl.addEventListener('show.bs.modal', () => { if(hasDataYapes()) generarInformeYapes(); });
+
+            const modalNeedsEl = document.getElementById('modalNeeds');
+            if (modalNeedsEl) modalNeedsEl.addEventListener('show.bs.modal', () => { if(state.needs && state.needs.generated) generarInformeNeeds(); });
+
+            const modalIngresosEl = document.getElementById('modalIngresos');
+            if (modalIngresosEl) modalIngresosEl.addEventListener('show.bs.modal', () => { if(state.ingresos && state.ingresos.generated) generarInformeIngresos(); });
+
+            const modalGastosEl = document.getElementById('modalGastos');
+            if (modalGastosEl) modalGastosEl.addEventListener('show.bs.modal', () => { if(state.gastos && state.gastos.generated) generarInformeGastos(); });
+
             const modalFinEl = document.getElementById('modalFin');
             if (modalFinEl) {
                 modalFinEl.addEventListener('show.bs.modal', () => {
                     checkFinLockState();
                     const totalYape = state.yapes.reduce((acc, curr) => acc + curr, 0);
                     document.getElementById('fin_monto_yape').value = totalYape.toFixed(2);
+                    if(hasDataFin()) generarInformeFin();
                 });
             }
         });
+
+        function togglePuestoDropdown() {
+            const menu = document.getElementById('puestoDropdownMenu');
+            menu.classList.toggle('show');
+        }
+
+        function seleccionarPuesto(puestoNombre) {
+            state.puesto = puestoNombre;
+            actualizarUISeleccionPuesto(puestoNombre);
+            document.getElementById('puestoDropdownMenu').classList.remove('show');
+            saveState();
+        }
+
+        function actualizarUISeleccionPuesto(puestoNombre) {
+            document.getElementById('puesto_selected_text').innerText = puestoNombre;
+            const items = document.querySelectorAll('.puesto-dropdown-item');
+            items.forEach(item => {
+                const textSpan = item.querySelector('span').innerText;
+                const checkIcon = item.querySelector('.check-icon');
+                if (textSpan === puestoNombre) {
+                    item.classList.add('active');
+                    checkIcon.classList.remove('d-none');
+                } else {
+                    item.classList.remove('active');
+                    checkIcon.classList.add('d-none');
+                }
+            });
+        }
 
         function checkFinLockState() {
             const isInicioDone = hasDataInicio();
@@ -1100,7 +1238,7 @@
         }
 
         function saveState() {
-            state.puesto = document.getElementById('puesto_select').value;
+            state.puesto = state.puesto || 'Puesto 1';
             state.inicio.carton_8 = document.getElementById('init_carton_8').value;
             state.inicio.carton_12 = document.getElementById('init_carton_12').value;
             state.inicio.carton_medio = document.getElementById('init_carton_medio').value;
@@ -1171,7 +1309,7 @@
         }
 
         function restoreFormValues() {
-            document.getElementById('puesto_select').value = state.puesto || 'Puesto 1';
+            if(state.puesto) actualizarUISeleccionPuesto(state.puesto);
             document.getElementById('init_carton_8').value = state.inicio.carton_8 || '';
             document.getElementById('init_carton_12').value = state.inicio.carton_12 || '';
             document.getElementById('init_carton_medio').value = state.inicio.carton_medio || '';
@@ -1239,6 +1377,13 @@
             document.getElementById('fin_plastico_12').value = state.fin.plastico_12 || '';
             document.getElementById('fin_plastico_medio').value = state.fin.plastico_medio || '';
             document.getElementById('fin_monto_efectivo').value = state.fin.efectivo || '';
+
+            if (hasDataInicio()) document.getElementById('result_inicio').value = generarInformeInicio();
+            if (hasDataYapes()) document.getElementById('result_yape').value = generarInformeYapes();
+            if (state.needs && state.needs.generated) document.getElementById('result_needs').value = getRawNeedsText();
+            if (state.ingresos && state.ingresos.generated) document.getElementById('result_ingresos').value = getRawIngresosText();
+            if (state.gastos && state.gastos.generated) document.getElementById('result_gastos').value = generarInformeGastos();
+            if (hasDataFin()) document.getElementById('result_fin').value = generarInformeFin();
         }
 
         document.querySelectorAll('input, select').forEach(element => {
@@ -1258,7 +1403,7 @@
         }
 
         function getPuestoActual() {
-            return document.getElementById('puesto_select').value || 'Puesto 1';
+            return state.puesto || 'Puesto 1';
         }
 
         function hasDataInicio() {
@@ -1316,7 +1461,15 @@
             showToast("Sección limpiada correctamente");
         }
 
-        /* INFORMES INDIVIDUALES (MANTIENEN SU PUESTO NORMALMENTE) */
+        /* FUNCIÓN AUXILIAR PARA HACER SCROLL AUTOMÁTICO HACIA EL INFORME */
+        function scrollToElement(elementId) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        /* INFORMES INDIVIDUALES CON SCROLL AUTOMÁTICO */
         function generarInformeInicio() {
             saveState();
             if (!hasDataInicio()) { showToast("Faltan datos en Inicio", true); document.getElementById('result_inicio').value = ""; return ""; }
@@ -1325,6 +1478,7 @@
             const texto = `☀️ INFORME DE INICIO DE DÍA - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.inicio.timestamp}\n---------------------------------------------\n📦 Stock Inicial de Vasos:\n📄 CARTÓN:\n- 8 oz: ${i.carton_8 || 0}\n- 12 oz: ${i.carton_12 || 0}\n- Medio Litro: ${i.carton_medio || 0}\n- Litro: ${i.carton_litro || 0}\n\n🥤 PLÁSTICO:\n- 12 oz: ${i.plastico_12 || 0}\n- Medio Litro: ${i.plastico_medio || 0}\n---------------------------------------------\nEstado: Día iniciado correctamente.`;
             document.getElementById('result_inicio').value = texto;
             updateStatusBadges();
+            scrollToElement('result_inicio');
             return texto;
         }
 
@@ -1344,6 +1498,7 @@
             if (state.yapes.length === 0) state.yape_timestamp = null;
             saveState();
             renderYapesList();
+            if (state.yapes.length === 0) document.getElementById('result_yape').value = "";
         }
 
         function renderYapesList() {
@@ -1382,6 +1537,7 @@
             const texto = `📱 INFORME DE YAPES DEL DÍA - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.yape_timestamp}\n---------------------------------------------\n🔢 Desglose:\n${state.yapes.join(' + ')}\n\n📊 Resumen:\n- Total Yapes: ${state.yapes.length}\n- 💵 MONTO TOTAL: S/ ${total.toFixed(2)}\n---------------------------------------------`;
             document.getElementById('result_yape').value = texto;
             updateStatusBadges();
+            scrollToElement('result_yape');
             return texto;
         }
 
@@ -1393,6 +1549,7 @@
             const txt = getRawNeedsText();
             document.getElementById('result_needs').value = txt;
             updateStatusBadges();
+            scrollToElement('result_needs');
             return txt;
         }
 
@@ -1438,6 +1595,7 @@
             const txt = getRawIngresosText();
             document.getElementById('result_ingresos').value = txt;
             updateStatusBadges();
+            scrollToElement('result_ingresos');
             return txt;
         }
 
@@ -1503,6 +1661,7 @@
             texto += `\n---------------------------------------------`;
             document.getElementById('result_gastos').value = texto;
             updateStatusBadges();
+            scrollToElement('result_gastos');
             return texto;
         }
 
@@ -1520,10 +1679,11 @@
             const texto = `🌙 INFORME DE CIERRE - ORNELA CREMOLADAS\n📍 PUESTO: ${getPuestoActual()}\n📅 Fecha y Hora: ${state.fin.timestamp}\n---------------------------------------------\n🥤 Vasos Vendidos / Sobrantes:\n📄 CARTÓN:\n- 8 oz: ${calcVentas(ini.carton_8, ing.carton_8, fin.carton_8)} (Sobran: ${fin.carton_8||0})\n- 12 oz: ${calcVentas(ini.carton_12, ing.carton_12, fin.carton_12)} (Sobran: ${fin.carton_12||0})\n- Medio Litro: ${calcVentas(ini.carton_medio, ing.carton_medio, fin.carton_medio)} (Sobran: ${fin.carton_medio||0})\n- Litro: ${calcVentas(ini.carton_litro, ing.carton_litro, fin.carton_litro)} (Sobran: ${fin.carton_litro||0})\n\n🥤 PLÁSTICO:\n- 12 oz: ${calcVentas(ini.plastico_12, ing.plastico_12, fin.plastico_12)} (Sobran: ${fin.plastico_12||0})\n- Medio Litro: ${calcVentas(ini.plastico_medio, ing.plastico_medio, fin.plastico_medio)} (Sobran: ${fin.plastico_medio||0})\n\n💰 Dinero:\n- Yape: S/ ${montoYape.toFixed(2)}\n- Efectivo: S/ ${montoEfectivo.toFixed(2)}\n- 💵 TOTAL: S/ ${(montoYape + montoEfectivo).toFixed(2)}\n---------------------------------------------`;
             document.getElementById('result_fin').value = texto;
             updateStatusBadges();
+            scrollToElement('result_fin');
             return texto;
         }
 
-        /* CONSOLIDADO GENERAL (LLEVA EL PUESTO ARRIBA EN LA CABECERA Y REMUEVE LOS PUESTOS INTERNOS) */
+        /* CONSOLIDADO GENERAL */
         function getRawConsolidadoText() {
             saveState();
             let bloques = [];
