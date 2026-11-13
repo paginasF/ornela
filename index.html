@@ -50,7 +50,7 @@
                 <h2 class="greeting-title"><span id="greeting_text">Hola 👋</span></h2>
                 <div class="greeting-puesto">Estás en el <strong id="greeting_puesto">Puesto 1</strong></div>
                 <div class="greeting-meta">
-                    <span id="live-date">-- ---. ----</span> · <span id="live-time">--:--:-- --</span>
+                    <span id="live-date">-- ---. ----</span> · <span id="live-time">--:--:-- --</span><span id="clima" class="clima d-none"></span>
                 </div>
             </div>
 
@@ -171,6 +171,15 @@
                 </div>
                 <i class="fa-solid fa-chevron-right item-arrow"></i>
             </button>
+
+            <button class="action-item" type="button" data-bs-toggle="modal" data-bs-target="#modalHistorial">
+                <div class="icon-box"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="item-info">
+                    <div class="item-title"><span>Historial</span></div>
+                    <p class="item-desc">Ver días anteriores</p>
+                </div>
+                <i class="fa-solid fa-chevron-right item-arrow"></i>
+            </button>
         </div>
 
         <!-- Consolidado General -->
@@ -215,7 +224,7 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_inicio', 'inicio')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_inicio')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" class="btn-brand" onclick="generarInformeInicio()">Generar</button>
+                        <button type="button" class="btn-brand" onclick="botonGenerado(this, generarInformeInicio())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -257,7 +266,7 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_yape', 'yape')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_yape')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" class="btn-brand" onclick="generarInformeYapes()">Generar</button>
+                        <button type="button" class="btn-brand" onclick="botonGenerado(this, generarInformeYapes())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -317,7 +326,7 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_needs', 'needs')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_needs')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" class="btn-brand" onclick="generarInformeNeeds()">Generar</button>
+                        <button type="button" class="btn-brand" onclick="botonGenerado(this, generarInformeNeeds())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -377,7 +386,7 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_ingresos', 'ingresos')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_ingresos')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" class="btn-brand" onclick="generarInformeIngresos()">Generar</button>
+                        <button type="button" class="btn-brand" onclick="botonGenerado(this, generarInformeIngresos())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -412,7 +421,7 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_gastos', 'gastos')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_gastos')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" class="btn-brand" onclick="generarInformeGastos()">Generar</button>
+                        <button type="button" class="btn-brand" onclick="botonGenerado(this, generarInformeGastos())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -457,7 +466,7 @@
                     <div class="footer-actions">
                         <button type="button" id="btn_copiar_fin" class="btn-icon" title="Copiar" onclick="copiarInforme('result_fin', 'fin')"><i class="fa-regular fa-copy"></i></button>
                         <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_fin')"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" id="btn_generar_fin" class="btn-brand" onclick="generarInformeFin()">Generar</button>
+                        <button type="button" id="btn_generar_fin" class="btn-brand" onclick="botonGenerado(this, generarInformeFin())">Generar</button>
                     </div>
                 </div>
             </div>
@@ -481,6 +490,47 @@
                     <div class="footer-actions">
                         <button type="button" class="btn-icon with-text" onclick="copiarInforme('result_consolidado', 'consolidado')"><i class="fa-regular fa-copy"></i> Copiar</button>
                         <button type="button" class="btn-brand" onclick="enviarWhatsApp('result_consolidado')"><i class="fa-brands fa-whatsapp"></i> Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HISTORIAL -->
+    <div class="modal fade" id="modalHistorial" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title"><span class="icon-box"><i class="fa-solid fa-calendar-days"></i></span>Historial</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="historial_lista_vista">
+                        <div class="hist-stats">
+                            <div class="hist-stat">
+                                <div class="kpi-label">Últimos 7 días</div>
+                                <div class="kpi-value is-brand" id="hist_semana">S/ 0.00</div>
+                            </div>
+                            <div class="hist-stat">
+                                <div class="kpi-label">Mejor día</div>
+                                <div class="kpi-value" id="hist_mejor">—</div>
+                                <div class="kpi-sub" id="hist_mejor_fecha">Sin datos</div>
+                            </div>
+                        </div>
+                        <span class="section-tag">Días anteriores</span>
+                        <div id="historial_lista"></div>
+                    </div>
+                    <div id="historial_detalle_vista" class="d-none">
+                        <span class="section-tag" id="hist_detalle_titulo"></span>
+                        <textarea id="result_historial" class="form-control ticket-textarea" rows="14" readonly></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer d-none" id="historial_footer">
+                    <button type="button" class="btn-ghost" onclick="volverHistorial()"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                    <div class="footer-actions">
+                        <button type="button" class="btn-icon btn-borrar" id="btn_borrar_dia" title="Borrar día" onclick="borrarDiaHistorial()"><i class="fa-solid fa-trash-can"></i></button>
+                        <button type="button" class="btn-icon" title="Copiar" onclick="copiarInforme('result_historial', 'historial')"><i class="fa-regular fa-copy"></i></button>
+                        <button type="button" class="btn-wa" title="Enviar por WhatsApp" onclick="enviarWhatsApp('result_historial')"><i class="fa-brands fa-whatsapp"></i></button>
                     </div>
                 </div>
             </div>
@@ -511,7 +561,7 @@
                 <div class="confirm-body">
                     <div class="reset-modal-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
                     <h5>¿Reiniciar turno?</h5>
-                    <p>Esta acción borrará todos los datos guardados del turno actual y comenzará un nuevo día.</p>
+                    <p>El día actual se guardará en el <strong>Historial</strong> y comenzará un nuevo día.</p>
                 </div>
                 <div class="confirm-footer">
                     <button type="button" class="btn-soft" data-bs-dismiss="modal">Cancelar</button>
@@ -525,6 +575,7 @@
     <div id="customToast" class="custom-toast">
         <i id="toastIcon" class="fa-solid fa-circle-check text-success"></i>
         <span id="toastMessage">¡Copiado al portapapeles!</span>
+        <button type="button" id="toastAction" class="toast-action d-none">Deshacer</button>
     </div>
 
     <!-- Bootstrap JS -->
@@ -533,5 +584,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script src="js/app.js"></script>
+    <script src="js/historial.js"></script>
+    <script src="js/clima.js"></script>
 </body>
 </html>

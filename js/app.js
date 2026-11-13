@@ -5,6 +5,8 @@ let state = {
     puesto: 'Puesto 1',
     inicio: { carton_8: '', carton_12: '', carton_medio: '', carton_litro: '', plastico_8: '', plastico_12: '', plastico_medio: '', text: '', timestamp: null, generated: false },
     yapes: [],
+    yapes_horas: [],
+    turno_inicio: null,
     yapes_text: '',
     yape_timestamp: null,
     needs: {
@@ -50,6 +52,13 @@ window.addEventListener('DOMContentLoaded', () => {
         } catch(e){}
     }
 
+    // Yapes guardados antes de existir la hora: se completan vacíos para no desalinear
+    while (state.yapes_horas.length < state.yapes.length) state.yapes_horas.push('');
+    if (!state.turno_inicio) {
+        state.turno_inicio = Date.now();
+        localStorage.setItem('ornela_arqueo_v25', JSON.stringify(state));
+    }
+
     restoreFormValues();
     actualizarReloj();
     setInterval(actualizarReloj, 1000);
@@ -57,6 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
     toggleSueldoInput();
     checkFinLockState();
     updateStatusBadges();
+    mantenerPantallaEncendida();
 
     const modalFinEl = document.getElementById('modalFin');
     if (modalFinEl) {
@@ -151,6 +161,15 @@ function updateStatusBadges() {
     document.getElementById('dash_progreso').innerText = `${hechos}/6`;
     document.getElementById('dash_progreso_bar').style.width = `${(hechos / 6) * 100}%`;
 
+    // Ícono verde en las secciones listas y resaltado en el siguiente paso
+    const pasos = [[bInicio, state.inicio.generated], [bYapes, hasDataYapes()], [bNeeds, state.needs.generated], [bIngresos, state.ingresos.generated], [bGastos, state.gastos.generated], [bFin, state.fin.generated]];
+    const siguiente = pasos.find(([, listo]) => !listo);
+    pasos.forEach(([badge, listo]) => {
+        const item = badge.closest('.action-item');
+        item.classList.toggle('is-done', listo);
+        item.classList.toggle('is-next', !!siguiente && badge === siguiente[0]);
+    });
+
     // Celebrar solo cuando se pasa a 6/6 (no al abrir la página ya completa)
     if (ultimoAvance !== null && ultimoAvance < 6 && hechos === 6) celebrar();
     ultimoAvance = hechos;
@@ -168,6 +187,51 @@ function celebrar() {
         disableForReducedMotion: true
     });
 }
+
+// Muestra "✓ Generado" un momento si el informe se generó
+function botonGenerado(btn, texto) {
+    if (!texto) return;
+    if (!btn.dataset.original) btn.dataset.original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Generado';
+    btn.classList.add('is-generated');
+    clearTimeout(btn._timer);
+    btn._timer = setTimeout(() => {
+        btn.innerHTML = btn.dataset.original;
+        btn.classList.remove('is-generated');
+    }, 1600);
+}
+
+// Evita que el celular apague la pantalla mientras la página está abierta
+let wakeLock = null;
+async function mantenerPantallaEncendida() {
+    if (!('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+    try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+}
+document.addEventListener('visibilitychange', mantenerPantallaEncendida);
+
+// Efecto de onda al tocar botones
+document.addEventListener('pointerdown', (e) => {
+    const btn = e.target.closest('.btn-brand, .btn-soft, .btn-ghost, .btn-icon, .btn-wa, .action-item, .theme-toggle, .puesto-btn-toggle');
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 2;
+    const onda = document.createElement('span');
+    onda.className = 'ripple';
+    onda.style.width = onda.style.height = `${size}px`;
+    onda.style.left = `${e.clientX - rect.left - size / 2}px`;
+    onda.style.top = `${e.clientY - rect.top - size / 2}px`;
+    btn.appendChild(onda);
+    onda.addEventListener('animationend', () => onda.remove());
+});
+
+// Sin números negativos: se bloquea el "-" y se limpia si llega pegado
+document.addEventListener('keydown', (e) => {
+    if (e.target.matches('input[type="number"]') && ['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault();
+});
+document.addEventListener('input', (e) => {
+    const el = e.target;
+    if (el.matches('input[type="number"]') && parseFloat(el.value) < 0) el.value = '';
+}, true);
 
 function saveState() {
     // INICIO
@@ -358,8 +422,7 @@ function actualizarReloj() {
 
     const hora = now.getHours();
     const saludo = hora >= 5 && hora < 12 ? 'Buenos días ☀️' : hora >= 12 && hora < 19 ? 'Buenas tardes 🍧' : 'Buenas noches 🌙';
-    document.getElementById('greeting_text').innerText = saludo;
-}
+    document.getElementById('greeting_text').innerText = saludo;}
 
 function getFechaHoraActual() {
     return new Date().toLocaleString('es-PE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
@@ -394,7 +457,8 @@ function ejecutarLimpiarModal() {
         document.getElementById('result_inicio').value = ''; 
     }
     else if (tipo === 'yape') { 
-        state.yapes = []; 
+        state.yapes = [];
+        state.yapes_horas = [];
         state.yapes_text = ''; 
         state.yape_timestamp = null; 
         document.getElementById('result_yape').value = ''; 
@@ -447,14 +511,23 @@ function agregarYape() {
     const val = parseFloat(input.value);
     if (isNaN(val) || val <= 0) return;
     state.yapes.push(val);
+    state.yapes_horas.push(getHoraCorta());
     if (!state.yape_timestamp) state.yape_timestamp = getFechaHoraActual();
     input.value = '';
     saveState();
     renderYapesList();
 }
 
+function getHoraCorta() {
+    return new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+
 function eliminarYape(idx) {
+    // Copia para poder deshacer
+    const borrado = { idx, monto: state.yapes[idx], hora: state.yapes_horas[idx], timestamp: state.yape_timestamp, teniaInforme: !!state.yapes_text };
     state.yapes.splice(idx, 1);
+    state.yapes_horas.splice(idx, 1);
+    showToast(`Yape de S/ ${borrado.monto.toFixed(2)} eliminado`, false, () => deshacerYape(borrado));
     if (state.yapes.length === 0) {
         state.yape_timestamp = null;
         state.yapes_text = '';
@@ -462,6 +535,15 @@ function eliminarYape(idx) {
     } else if (state.yapes_text) {
         generarInformeYapes();
     }
+    saveState();
+    renderYapesList();
+}
+
+function deshacerYape(b) {
+    state.yapes.splice(b.idx, 0, b.monto);
+    state.yapes_horas.splice(b.idx, 0, b.hora);
+    if (!state.yape_timestamp) state.yape_timestamp = b.timestamp;
+    if (b.teniaInforme) generarInformeYapes();
     saveState();
     renderYapesList();
 }
@@ -485,7 +567,7 @@ function renderYapesList() {
 
     let html = '';
     state.yapes.forEach((m, idx) => {
-        html += `<div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom"><span class="small fw-semibold">#${idx + 1} - S/ ${m.toFixed(2)}</span><button class="btn btn-sm text-danger p-0" onclick="eliminarYape(${idx})"><i class="fa-solid fa-xmark"></i></button></div>`;
+        html += `<div class="d-flex justify-content-between align-items-center mb-1 pb-1 border-bottom"><span class="small fw-semibold">#${idx + 1} - S/ ${m.toFixed(2)}${state.yapes_horas[idx] ? ` <span class="yape-hora">· ${state.yapes_horas[idx]}</span>` : ''}</span><button class="btn btn-sm text-danger p-0" onclick="eliminarYape(${idx})"><i class="fa-solid fa-xmark"></i></button></div>`;
     });
     container.innerHTML = html;
     document.getElementById('yape_cadena_preview').innerText = state.yapes.join(' + ');
@@ -650,7 +732,10 @@ function generarInformeFin() {
     saveState();
     updateStatusBadges();
     scrollToInforme('result_fin');
-    if (primerCierre) celebrar();
+    if (primerCierre) {
+        celebrar();
+        showToast(`¡Buen trabajo! Hoy hiciste S/ ${(montoYape + montoEfectivo).toFixed(2)} 🎉`);
+    }
     return texto;
 }
 
@@ -731,16 +816,23 @@ function copiarInforme(elementId, tipo) {
     .catch(() => { txtFinal.select(); document.execCommand('copy'); showToast("¡Copiado!"); });
 }
 
-function showToast(msg, isError = false) {
+let toastTimer = null;
+function showToast(msg, isError = false, accion = null) {
     const toast = document.getElementById('customToast');
     const icon = document.getElementById('toastIcon');
+    const btnAccion = document.getElementById('toastAction');
     icon.className = isError ? "fa-solid fa-triangle-exclamation text-warning" : "fa-solid fa-circle-check text-success";
     document.getElementById('toastMessage').innerText = msg;
+    // Botón opcional (ej. "Deshacer")
+    btnAccion.classList.toggle('d-none', !accion);
+    btnAccion.onclick = accion ? () => { accion(); toast.classList.remove('show'); } : null;
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2800);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), accion ? 5000 : 2800);
 }
 
 function executeReset() {
+    guardarEnHistorial();
     localStorage.removeItem('ornela_arqueo_v25');
     location.reload();
 }
